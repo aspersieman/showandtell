@@ -1,0 +1,218 @@
+basePath: /api/v1
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  types.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  types.LoginResponse:
+    properties:
+      accessToken:
+        type: string
+      expiresIn:
+        type: integer
+      refreshToken:
+        type: string
+    type: object
+  types.Version:
+    properties:
+      latest_version:
+        description: |-
+          LatestVersion
+          example: 2.0.0
+        type: string
+      supported_versions:
+        description: |-
+          SupportedVersions
+          example: [1.8.0, 1.9.0]
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8021
+info:
+  contact:
+    email: support@evsolutions.biz
+    name: Support
+  description: EVS Show and Tell collaboration system
+  title: Show and Tell
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to Keycloak with username and password
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Login with Keycloak
+      tags:
+      - auth
+  /users/:
+    get:
+      consumes:
+      - application/json
+      description: get users
+      parameters:
+      - description: Authorization header
+        format: string
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List users
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get users
+      parameters:
+      - description: Authorization header
+        format: string
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List users
+      tags:
+      - users
+  /version:
+    get:
+      consumes:
+      - application/json
+      description: get versions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Version'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List versions
+      tags:
+      - versions
+swagger: "2.0"
