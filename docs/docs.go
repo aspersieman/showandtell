@@ -270,6 +270,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "description": "Ignore",
                     "type": "string"
                 },
                 "updatedAt": {

@@ -21,6 +21,7 @@ definitions:
       name:
         type: string
       password:
+        description: Ignore
         type: string
       updatedAt:
         type: string

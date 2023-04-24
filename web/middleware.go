@@ -2,9 +2,7 @@ package web
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -44,13 +42,10 @@ func (auth *KeycloakMiddleware) VerifyToken(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(types.ApiResponse{Data: fmt.Sprintf("Invalid or malformed token: %s", err.Error())})
 	}
 
-	jwt, _, err := auth.keycloak.Gocloak.DecodeAccessToken(context.Background(), token, auth.keycloak.Realm)
+	_, _, err = auth.keycloak.Gocloak.DecodeAccessToken(context.Background(), token, auth.keycloak.Realm)
 	if err != nil {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(types.ApiResponse{Data: fmt.Sprintf("Invalid or malformed token: %s", err.Error())})
 	}
-
-	jwtj, _ := json.Marshal(jwt)
-	log.Printf("token: %v\n", string(jwtj))
 
 	// check if the token isn't expired and valid
 	if !*result.Active {

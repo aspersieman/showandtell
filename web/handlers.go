@@ -83,7 +83,7 @@ func (c *Controller) ApiAuthLogin(ctx *fiber.Ctx) error {
 //	@Router       /users/ 			[get]
 //	@Router       /users/{id}  [get]
 func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
-	begin := ctx.QueryInt("b", 1)
+	begin := ctx.QueryInt("b", 0)
 	end := ctx.QueryInt("e", 10)
 	id := ctx.Params("id")
 

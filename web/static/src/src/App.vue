@@ -4,6 +4,7 @@ import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 
 import NavBar from './components/NavBar.vue'
+import FooterBar from './components/FooterBar.vue'
 
 onMounted(() => {
   initFlowbite()
@@ -12,8 +13,8 @@ onMounted(() => {
 
 <template>
   <NavBar />
-
   <RouterView />
+  <FooterBar />
 </template>
 
 <style scoped></style>
