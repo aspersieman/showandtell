@@ -11,14 +11,17 @@ import (
 	utils "bitbucket.org/envirovisionsolutions/showandtell/utils"
 )
 
-//go:embed web/static/index.html
+//go:embed web/static/src/dist/index.html
 var EmbedIndex embed.FS
 
-//go:embed web/static/*
+//go:embed web/static/src/dist/* web/static/src/dist/assets/*
 var EmbedDirStatic embed.FS
 
 //go:embed web/static/img/favicon.ico
 var EmbedFavIcon embed.FS
+
+//go:embed web/static/VERSION
+var EmbedVersion embed.FS
 
 // @title Show and Tell
 // @version 1.0
@@ -50,6 +53,7 @@ func main() {
 			IndexFile: EmbedIndex,
 			StaticDir: EmbedDirStatic,
 			FavIcon:   EmbedFavIcon,
+			Version:   EmbedVersion,
 		}
 		utils.Setup()
 		cmd.Serve()

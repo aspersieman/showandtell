@@ -1,4 +1,5 @@
 DIR := $(shell mktemp -d)
+STATIC_DIR := web/static/src/src
 
 install_deps:
 	@echo "Installing go-swagger..."
@@ -9,16 +10,16 @@ install_deps:
 swag:
 	@~/go/bin/swag init --parseDependency --parseInternal
 
-build:
+build: static
 	@go build -o bin/showandtell main.go
 
-serve:
+serve: static
 	@go run main.go --serve
 
 static:
 	@cd $(STATIC_DIR) && npm run build
 
-compile:
+compile: static
 	@echo "Compiling for every OS and Platform"
 	GOOS=linux GOARCH=386 go build -o build/showandtell-linux-386 main.go
 	GOOS=linux GOARCH=amd64 go build -o build/showandtell-linux-amd64 main.go

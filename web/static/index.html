@@ -17,47 +17,11 @@
     }
 
     body {
-      /* center in the viewport */
       font-family: Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      /* pattern creating a beehive out of hexagon shapes */
-      background: url('data:image/svg+xml;utf8,<svg version="1.1" viewBox="0 0 183.2 300" xmlns="http://www.w3.org/2000/svg" width="183.2" height="300"><g fill="none" stroke-width="10" stroke="%23ffcd12" opacity="0.4"><g transform="translate(5 5)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path><g transform="translate(86.6 0)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path></g><g transform="translate(43.3 75)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path></g><g transform="translate(0 150)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path><g transform="translate(86.6 0)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path></g><g transform="translate(43.3 75)"><path d="M 43.3 0 86.6 25 86.6 75 43.3 100 0 75 0 25 z"></path></g></g></g></g></svg>'),
-        #ffe345;
-    }
-
-    /* size the svg to cover a sizeable portion of the viewport */
-    body>svg {
-      width: 80vmin;
-      height: auto;
-    }
-
-    /* animation to rotate the bees around the center */
-    .rotate {
-      animation-iteration-count: 2;
-      animation: rotate 2s reverse cubic-bezier(0.25, 0.45, 0.75, 0.55);
-      /* timing function slightly different than linear to give a bit of a nod to each step */
-    }
-
-    /* rotate the bees around the center in multiple steps, this to have the timing function affect each step */
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      33% {
-        transform: rotate(120deg);
-      }
-
-      67% {
-        transform: rotate(240deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
     }
 
     .evs-logo {
@@ -138,74 +102,10 @@
   </ul>
   <div class="title-container">
     <div class="title">Show and Tell</div>
-    <div class="sub-title">EVS ForestWatch API</div>
+    <div class="sub-title">Show and Tell API</div>
   </div>
   <img class="evs-logo"
     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACWCAYAAAC1meaLAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QITDwk0SRuDQQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAQ7ElEQVR42u2dbXBUVZrH/53BArPkjZc4mKRntvMiRJAN1IAYZGDogUkxqLtDjUxMynJxwxTgh2XLAVmzwOALOBXcXcAFRkSHkEJrnBpgKQw2JiOEJOwgE2IlGKCVTrpdO4HE7l6EheXsh/bcdJoO6e70y723/78viCT9cu/93ec5zzn3OQAhhBBCCCHDwsBDoD067G5hu/pNVN/DPCWT10YUGMFDoE3+2+bmQdAgSTwEhFA4QigcIYTCEULhCCEUThccOfBbHgQKR2LFJauVB4HCEUIoHCEUjhAKRwihcIToBy5eJgGp3HlWxPszlC/OQ0FWiq6eWmCEI4QRTv/IZ9r+ZL0KALjU/Q0u9/yP8u8Xuq/B6b4R8HfbrXuQ0enCAzmpPJAUjvji8rjF6c+9YkmpGqy9KNhYDwAoNmUAAL437q/wo0njlN97ujgZpvRRAV/z1V/t4YGlcERGrnprL+o/uwJLezdSV/eLJaXauKgAxjH3oiArxdDw7e81hPAe80ueEDzSFC5hsbQ6xVvNdljau1GwsR6ZKSNhnjQeLz0xEab0UTBPyTQ0+Ei1iYeMwpHQ0sQDZ71RrOZ0F8zbmlFsysBLT0zEXFMGCrJSDDUAanioCIULn90nbKL+sytKmlg6Ixu7y6diaVEGUkf3p4eEULhhjMk2HL0IS3s3Kva13CFZDYAKHiZC4YafMr7TYEPBxnolXaRkhMJFOJrt+7Mdeesb4XTfQOmMbOwtn6pUE1Ul2YR78V1jSlRemi34KFxM0kZZYVw+x4jn52cp0UyN/NA0JmrNWjvsbvFZp4sXBoWLLJZWp1h/pEMRbXf5VFQ8ajRsqmLpnkSHpEQVrXjzSWHe1uz9+3Mz4axaYKh41Mj23oTCRTJVKn3z7ADRGtbONrCPPmFKGUFcHrf45YH+MZrluZkwT8k0mNfyAiAULqJUHjwv8tY3AoAyRjNX8cQTChfxcVrp23/Bro9tA6qOPOWEwkV4nLbh6EWYtzWjdEY2NpR4nxpm1ZFQuAiz+4RNzN7qTR/lOI0LiIma0EWVssPuFsWbT4qKfS1YPscIZ9UCVh4JI1w0qDx4Xsj1jh3r5+qu6QxhhFNVVNt05AIqF+WjYe1sA2UjjHBRHKvlj09mVCOMcNHC5fGuFJFjNUY1wggXxRRSTmDLCiRPn76xXf0GHXZ3RBsmxfsGrQnhdp+wKYWRo6umcgI7QXjzD+1MKeOVQsrCCGUjTCmjJFvJ9hZc6L7GFJIwwsVqvHZy9SzKRhjhojlekyV/vY7X5L4C/sh9Bobi1E4+V0ThIiSbbEVX82yRIXWt9iSy9l1H59VrAICP2nuUf2+w9ir/LfcV8EfuMzAUowAYx9zLq5fChY8sjshn1tQ6rjz9eb9UH7X3KLvcSIkyU0Yif3wyAAzYnGPjogLlv+W+Av6vH2wj2VUrVwnOP1K4YclWc7pLVbLJTTl8xZIdl6VUP5o0TtnlRkrkBOAMIJCWHg/6bpp3M8R48y9vfkLhIh0xSra3wNLeHfdKpKXVKeSWUnJTDpnm+YplnpKpSKXX1uZqGTcv3fgn3e0SZIi3bBe6r+Hk6lkxXwEgm75+1N6jjK/krjdzHxirbMqhxpN2rLZWLFi4UPcpZTSEO7D+h4m30iQesvnueOO/rdTTxUbV7nrjcNiE7bIddrsdAGC7bMOChQsNe/fsEalpaQCASYWFyDbmcAUOI1x8ZfPfVgrw7nij5gjm8rhFW+unaDzViEtWK/q+7rvjZ6qrqw1lZWV33P2/n2NEbl4uFpb8GPffr/0em4xwGpDNV7LU1f1RzH/HG7XhcNhE7dEPsW7NCwElC4YvOm34otOG43V1ePGFdeKnjy3Gw7NmMeolYoSLtmy+u5DKjTjmPjAWau+mLEU7XleH2zdvIemeoe+Bg0W4QKSnpaOs7ClNiscINwyiIZuMZi/+8fyAXUjVHMn8ix+vvPyaEtGCkS1U+r7uw/YdO/B61Vbx5C+W6CLV1DIxEa70zbPC0t4dMdl8t5UCAPOk8Uo7PNVtKzXIjWLPrt/id/v2xew9/+v0aVyyWtHU2CiYZupYODmpbXlu5rBl899WSkvRzDeFfO3lV/FFpy2m75t0zwgl2iWqdJ0jvwNUHB5+mrp7sUGVwsm1kbvLpw5rUtt3W6liU4ayIqWiSls7kToctgEpZLz493/9N+zds0c8s2xZQkmXc+P/UGzKQMPa2eF/72EKmxQL2cItXMjOXP673WhxWymXx60K2WS0O15Xh2O1tSKRhOsc+Z34H/tovGiH3S1e/ON5lM7IDks2ua2UXF6l9W2lXB63eO3lV1Uhmy9vv7UXTY2NCSWd7sZwLo/34dH88cmoebbIEOrv/ua4HbJdubLbjcYf/3r/3fdiPmYLNtJVV++Hw2ETrF5qVLiS7S0A4H14NARRLK1O5Snv5XOM2PT4REOFDraVampsFNt37FDt57va04M3tu1U5Wf79bPTIvp69dZevNNg049wlQfPi10f23By9ayg1/V12N3imX0tym43O5fm6WZNoMvjFuvWvKDqz5h0zwh80WlT5YLoaCyO0M0YztLqFJuOXMBLT0wM+kDJdgqyUVDNs0W66sr14Qe1qhu3BeL2zVs4dOgwXB43x3NaEK7D7halb/8l6CKJ/243Fzfqr1GQy+MWdXX12rgIvp2j+/CDWhqhBeGe2deC/PHJ2Ll06KeELa1OJap1rJ+LTY9P1GWvyaaGU5qIbr5RTis3iIQWrvLgeXGh+xr2lt+9w5Zs6mre1qxENT335Th06LC2LoRvoxynCVQsXLDjtg77wFYKeo1qEofDJrQU3XxpPNVIK6JI2FVKOd9WbMq467hNppD545Pj0kohPhftac1+9ktWK60IItAE+7P+HdrCFu43x72P/O8tn4qCQebbdp+wCT2W+4fCdtmm2c/e93Uf2traRGFhISfCB0EuNQxqyLUof/gpZTCppG+fSb2V+4fizFltt3fr6uykVWoaw60/0jFoKunyeEv+lvZuVTd1jeb4Tevfwd7VRTPUMobzXU3in0rGu/WdKlKyPo8OvsPXuj0/DdbeyDwTFwvhOuxuMXtrI5bPMd4hE2XTD1d6evQ59orA4orizSeF7z4RURVuw9GLAIBNj08MKBsAXNw4KyrFkdertgq1V9ByTSZkG3Owbt26qL5PdXV1VN8jPX00SsvLxBs73lC9RLkmE/7xn1Zr5uYetHCWVqcwb2v2tiSvCixbNLeX0spBXVjyE1F79AMlUowdNy7ifwJA7dEPovb66elpSLSnwWNF0Ae1ePNJAWDA4+mxkk1LtLW1iVdeeSXolndhRrig2+SFw/SiaZqKGrEk1JSyclH+gIwwqCqlpdUpGqy9A7Zc8h2zUbY7iZZsHMPFFofDJrp6miN2cwtKOPkkgO+g85cHLioFEsrWT7YxR/PfITcvlycSQIt1v/j0yx3IHjfTEDPhdp+wCaf7BjaU9D8JEOk+k3oidXSKIT0tXdPfISs7O6HPocvjFsfOrBFf9Z7DgulbInp9D5n3yGZAUizfblyUbZAIYTJperVJdk5Owp67Fut+cbDp57gv46GAsvnuahsMOWOSgxdOViY3lOShxufvlYvyE24FSSg8OPlBTQp3++YtjBk3Dom4jtLlcYumz17CqbatyJ1gHjSy+U+JDUVDKBFu/ZEOJbrJSe/SGdkhv2miMXnKJE1+7qR7RmD6tKKEjWqe6867yhbVMZysTP79zCwAoT3Vnejcf7/R8P0coyY/+6TCwoQ5Tw6HTRw7s0acatsaE9nuKtxbzXYUmzJgnpJpCPapbtLPTx9brLnPnJ6WnhD7ybk8btFi3S8OfvK3uPSlxTvujoFsgwrXYXeLmtNdeLrYGFY3LgIUTpkMrVUr582bq/vz0tXTLA42/Ryn2rYq/++RwtUxkW1Q4fb92Y7MlJFYWpSBULpxkX5SR6cYtHQBp6el48c/WajrqHbszBpxuGkFPNedA2SbanoqZtd2QOF2fWzD8jlG5alujtvC42dLlmhiTu72zVsoK3tKl8MFmT7ur5+rpI/xki2gcJZWp3C6byBnTDJkKslxW/isWLlC9Z/xBzNm6HLsJquPvukjAIwelYnFD78Rc9kCCieLJe802IZsEESCGMsVFhrmz5un6lTyyV8s0d04bZ+lRKk++ss2v3BXRJdrDS/CtXfjQvc1NFh7sbd8Ko2JAM8sW6baaYKysqd0s++3LPP7j9P8ZYvn900KlE463TdQuSifVckI8qt/fgFqk27VypW6SCVlQcS3zB9Itscffi/uN5cR/ukkAGSmjMTz87OwKUoHx3W9bcifSx1VqKuxY+roFIPcmFENe8XpQTa5HGt//dy7/lzuBDMefuBFVVxPI/zTScC7P9twPpzDYRPd108AAL7qPQcAyp1nqIPjy3/853Qh7073ZTwEAMqfY1PzNCelWqTTumzBiiZl886xbVHFZ1cOeofdLQo21iMzZSScVQtCOhldPc2i7fIfBogVS3InmBUZx6bmxW1AHMoF8/677+F4XV1Yvx/uE9/paelYsXKFZhcny+ss2GssHmX/oIWrPHhebDpyIaheki6PW3zuPISves/FRbBgkFHxvoyHMH7Uo6osDDQ1Norq6v0h77ITjnDTi6Zh2fJ/0GSaHqpoo0dl4iFTmepkGyBc8eaT4kL3tbt23Wqx7hdqliyYSKi2KBhOtAtFOK1GNXlTP2etDlhxvJts8a5EBiUcKg4L/4YnvvnyV73nQvriFDA88c58cnbIiDeUcLdv3sIPZszArEdmaW6s5nDYxKdf7gjrepOVSDVHcYPv+K1j/VxlKkCKptVopmUBmxobRXtb26DyDSbc9KJpeHDyg5g8ZZKm5tbCjWb+504tlcjgIpxfRPN9bEEWJABvdXAwrri8jWJlZVLrUVENAjocNtHX50F7W/9Uys+WLDG8//vfCwDIyspCalqaJgshoY7NtFQcGVI4KZqUK1KFBjnvFs8qpt4i4OtVW4VW+0YOJ2UMlELO+5sNqq9KBxTO4bCJWKQhvgLqKQLGck5w1cpVYvuO7Zq5yGQki+T51sJ4LaiUUst3vHjjOxXx15mPRe1iULtw0Z42itXT2boULho5fTyF871p+AoYySioNuF8BYvmjVPN82uaFM7/BA6naqWFKDg2NQ9J/zsh5LFyPIWTQ4IrrotRF8z/uKl5fk3Twukp6oUjInD3taKxEM5fLCB+VWctp5CaE873Aki0eUF/GSW/e92O539doojpj3/UHGwzCjmNI2WKp1SDfW+tVSF1I1wipJvBUvduMuY9eU3X31ErE9mhork9leQJoHj6jeb9hZEtuvt+mt3EjOIxqlG4OIoHeJ9moHiMahQuRsj5GYrHqEbhKB7xi2r9FcgtCfO9R+j5y1E8dfJI4eqoLn2jcBSPJGD6mLDCUTymjxSO4iWEaP3Vx6M8IIkqnL94ibJek+M0CqcK5Fo9iheZiEbRKFxI4um5UxlFo3Cqg8vGOEajcHEUj+nmQHInmFH4vb/7NiOgaBQuyulmIkY9+Uxe/zzaFl4UFC62UU9PDZDuJtnAaEbRKFyc8H2qWi/yBe48RskonIrl08LuQkNHMkLhNJh2At6CS6y7XIUexZguUjid4N8EJ5at5gbfrJJRjMIlaAT0FxEY2FEL6O+qBQB1OHXHJiuSO3tdnuEBJ2Q4rFq5SvAoaJMkHgJCKBwhFI4QQuEIoXCEEApHCIUjhMIRQigcIRSOEELhCKFwhBBCCCGEEEIIIYQQ4sv/AyisWmCJowfAAAAAAElFTkSuQmCC" />
-  <!-- in a wrapping svg define a symbol describing the actual bee -->
-  <svg viewBox="0 0 600 600">
-    <defs>
-      <symbol id="bee" viewBox="0 0 170 100">
-        <!-- translation to avoid cropping the stroke -->
-        <g transform="translate(5 5)">
-          <!-- body, with overlapping shadow and light source -->
-          <path d="M 0 45 a 45 45 0 0 1 45 -45 h 80 a 25 25 0 0 1 25 25 q -45 65 -105 65 a 45 45 0 0 1 -45 -45"
-            fill="#ffcd12" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linecap="round"></path>
-          <path d="M 5 45 a 40 40 0 0 0 45 40 q 60 0 105 -65 q -45 45 -105 60 a 50 50 0 0 1 -45 -40" fill="#c57a00"
-            opacity="0.5"></path>
-          <path d="M 5 45 a 40 40 0 0 1 40 -40 h 20 q -50 0 -60 40" fill="#fff"></path>
-
-          <!-- stripes -->
-          <path d="M 60 2.5 a 82 82 0 0 1 0 82" fill="none" stroke="#000" stroke-width="15" stroke-linecap="round"
-            stroke-linecap="round"></path>
-          <path d="M 90 2.5 a 74 74 0 0 1 0 74" fill="none" stroke="#000" stroke-width="15" stroke-linecap="round"
-            stroke-linecap="round"></path>
-
-          <!-- wing, with overlapping shadow -->
-          <path d="M 70 0 h 60 a 30 30 0 0 1 0 60 q -30 0 -60 -60" fill="#fff" stroke="#000" stroke-width="10"
-            stroke-linecap="round" stroke-linecap="round"></path>
-          <path d="M 155 30 a 20 20 0 0 1 -20 20 q -30 0 -60 -45 q 25 45 60 55 a 20 20 0 0 0 20 -20" fill="#000"
-            opacity="0.1"></path>
-
-          <!-- eye -->
-          <circle cx="38" cy="35" r="12" fill="#252222"></circle>
-          <circle cx="40" cy="32" r="4" fill="#fff"></circle>
-        </g>
-      </symbol>
-    </defs>
-
-    <!-- center the graphics in the wrapping svg
-    wrap each bee in a group which is translated to have the bee rotate around the center
-    -->
-    <g transform="translate(300 300)">
-      <g transform="rotate(0)" class="rotate">
-        <!-- rotate this group -->
-        <g transform="rotate(0)">
-          <!-- starting point, to separate the bees -->
-          <g transform="translate(0 -70)" class="translate">
-            <!-- translation to separate from the center -->
-            <use href="#bee" width="170" height="100" transform="translate(-85 -50)"></use>
-            <!-- translation to center the bee graphics -->
-          </g>
-        </g>
-      </g>
-      <!-- repeat with different starting points (initial rotation) -->
-      <g transform="rotate(0)" class="rotate">
-        <g transform="rotate(120)">
-          <g transform="translate(0 -70)" class="translate">
-            <use href="#bee" width="170" height="100" transform="translate(-85 -50)"></use>
-          </g>
-        </g>
-      </g>
-      <g transform="rotate(0)" class="rotate">
-        <g transform="rotate(240)">
-          <g transform="translate(0 -70)" class="translate">
-            <use href="#bee" width="170" height="100" transform="translate(-85 -50)"></use>
-          </g>
-        </g>
-      </g>
-    </g>
-  </svg>
   <div class="app-version">v{{ .Version.LatestVersion }}</div>
 </body>
 

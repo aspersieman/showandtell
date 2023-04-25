@@ -12,9 +12,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
-  <RouterView />
-  <FooterBar />
+  <div class="flex flex-col h-screen justify-between">
+    <NavBar />
+    <RouterView />
+    <FooterBar />
+  </div>
 </template>
 
 <style scoped></style>

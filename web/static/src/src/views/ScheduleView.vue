@@ -10,7 +10,7 @@ const elapsed = () => {
 }
 </script>
 <template>
-  <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900">
+  <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 mb-auto bg-white dark:bg-gray-900">
     <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
       <div class="flex justify-between w-full border border-gray-300 rounded-md p-2 mx-2">
         <div if="state && !finished" class="flex justify-center text-xl self-center">Countdown</div>

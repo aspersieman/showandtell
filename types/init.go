@@ -27,6 +27,7 @@ type CmdContext struct {
 	IndexFile embed.FS
 	StaticDir embed.FS
 	FavIcon   embed.FS
+	Version   embed.FS
 }
 
 type LoginRequest struct {

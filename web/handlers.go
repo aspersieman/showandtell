@@ -2,6 +2,7 @@ package web
 
 import (
 	"context"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -23,7 +24,7 @@ func NewController(keycloak *auth.Keycloak) *Controller {
 }
 
 func (c *Controller) Home(ctx *fiber.Ctx) error {
-	return ctx.Render("web/static/index", fiber.Map{
+	return ctx.Render("web/static/src/dist/index", fiber.Map{
 		"Version": utils.GetAppVersion(),
 	})
 }
@@ -95,6 +96,52 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 		users := []models.User{}
 		database.DB.Db.Offset(begin).Limit(end).Find(&users)
 		return ctx.Status(200).JSON(types.ApiResponse{Data: users})
+	}
+}
+
+// ApiGetSchedules lists a single or a list of schedule records
+//
+//	@Summary      List schedules
+//	@Description  get schedules
+//	@Tags         schedules
+//	@Accept       json
+//	@Produce      json
+//	@Param        id 						path      int  false  "find by id"  Format(integer)
+//	@Param        b  						query     int  false  "list record position begin"  Format(integer)
+//	@Param        e  						query     int  false  "list record position end"  Format(integer)
+//	@Param        f  						query     int  false  "list record date from"  Format(date)
+//	@Param        t  						query     int  false  "list record date to"  Format(date)
+//	@Success      200						{array}   models.Schedule
+//	@Failure      400						{object}  error
+//	@Failure      404						{object}  error
+//	@Failure      500						{object}  error
+//	@Router       /schedules/ 			[get]
+//	@Router       /schedules/{id}  [get]
+func (c *Controller) ApiGetSchedules(ctx *fiber.Ctx) error {
+	currentTime := time.Now()
+	sixMonthsFromCurrent := currentTime.AddDate(0, 6, 0)
+	begin := ctx.QueryInt("b", 0)
+	end := ctx.QueryInt("e", 10)
+	fromQuery := ctx.Query("f", currentTime.Format("2006-01-02"))
+	from, err := time.Parse("2006-01-02", fromQuery)
+	if err != nil {
+		from = currentTime
+	}
+	toQuery := ctx.Query("t", sixMonthsFromCurrent.Format("2006-01-02"))
+	to, err := time.Parse("2006-01-02", toQuery)
+	if err != nil {
+		to = sixMonthsFromCurrent
+	}
+	id := ctx.Params("id")
+
+	if id != "" {
+		schedule := models.Schedule{}
+		database.DB.Db.Where("id = ?", id).First(&schedule)
+		return ctx.Status(200).JSON(types.ApiResponse{Data: schedule})
+	} else {
+		schedules := []models.Schedule{}
+		database.DB.Db.Where("start_date_time >= ? AND end_date_time <= ?", from, to).Offset(begin).Limit(end).Find(&schedules)
+		return ctx.Status(200).JSON(types.ApiResponse{Data: schedules})
 	}
 }
 

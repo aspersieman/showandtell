@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
-  "exclude": [],
+  "exclude": ["vue3-flip-countdown/*"],
   "compilerOptions": {
     "composite": true,
     "lib": [],

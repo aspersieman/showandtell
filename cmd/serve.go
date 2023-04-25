@@ -57,7 +57,7 @@ func Serve() {
 
 	app.Use("/", filesystem.New(filesystem.Config{
 		Root:       http.FS(utils.CmdContext.StaticDir),
-		PathPrefix: "web",
+		PathPrefix: "web/static/src/dist",
 		Browse:     true,
 	}))
 

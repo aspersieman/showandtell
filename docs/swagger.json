@@ -54,6 +54,156 @@
                 }
             }
         },
+        "/schedules/": {
+            "get": {
+                "description": "get schedules",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "List schedules",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Schedule"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/schedules/{id}": {
+            "get": {
+                "description": "get schedules",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "List schedules",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Schedule"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/users/": {
             "get": {
                 "description": "get users",
@@ -241,6 +391,58 @@
                 "valid": {
                     "description": "Valid is true if Time is not NULL",
                     "type": "boolean"
+                }
+            }
+        },
+        "models.Schedule": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "end_date_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "scheduleStatus": {
+                    "$ref": "#/definitions/models.ScheduleStatus"
+                },
+                "schedule_status_id": {
+                    "type": "integer"
+                },
+                "start_date_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ScheduleStatus": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
