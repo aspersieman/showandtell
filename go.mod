@@ -8,6 +8,7 @@ require (
 	github.com/gofiber/swagger v0.1.11
 	github.com/gofiber/template v1.8.1
 	github.com/joho/godotenv v1.5.1
+	github.com/kachit/gorm-seeder v0.0.3
 	github.com/swaggo/swag v1.16.1
 	gorm.io/driver/sqlite v1.5.0
 	gorm.io/gorm v1.25.0

@@ -1,22 +1,19 @@
 package database
 
 import (
-	models "bitbucket.org/envirovisionsolutions/showandtell/models"
 	"log"
 )
 
-// TODO: Implement migrations
-func Migrate(auto bool) {
+// TODO: Implement database versioning
+func RunMigrations(auto bool) {
 	ConnectDb()
 	log.Println("Running migrations...")
 	if auto {
 		DB.Db.AutoMigrate(
-			&models.User{},
-			&models.ScheduleStatus{},
-			&models.Schedule{},
-			&models.SpeakerStatus{},
-			&models.Speaker{},
-			&models.Comment{},
+			&User{},
+			&Schedule{},
+			&Speaker{},
+			&Comment{},
 		)
 	}
 	log.Println("Done")

@@ -2,13 +2,13 @@ package web
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 
 	auth "bitbucket.org/envirovisionsolutions/showandtell/auth"
 	database "bitbucket.org/envirovisionsolutions/showandtell/database"
-	models "bitbucket.org/envirovisionsolutions/showandtell/models"
 	types "bitbucket.org/envirovisionsolutions/showandtell/types"
 	utils "bitbucket.org/envirovisionsolutions/showandtell/utils"
 )
@@ -77,7 +77,7 @@ func (c *Controller) ApiAuthLogin(ctx *fiber.Ctx) error {
 //	@Param        id 						path      int  false  "find by id"  Format(integer)
 //	@Param        b  						query     int  false  "list record position begin"  Format(integer)
 //	@Param        e  						query     int  false  "list record position end"  Format(integer)
-//	@Success      200						{array}   models.User
+//	@Success      200						{array}   database.User
 //	@Failure      400						{object}  error
 //	@Failure      404						{object}  error
 //	@Failure      500						{object}  error
@@ -89,11 +89,11 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 
 	if id != "" {
-		user := models.User{}
+		user := database.User{}
 		database.DB.Db.Where("id = ?", id).First(&user)
 		return ctx.Status(200).JSON(types.ApiResponse{Data: user})
 	} else {
-		users := []models.User{}
+		users := []database.User{}
 		database.DB.Db.Offset(begin).Limit(end).Find(&users)
 		return ctx.Status(200).JSON(types.ApiResponse{Data: users})
 	}
@@ -111,7 +111,7 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 //	@Param        e  						query     int  false  "list record position end"  Format(integer)
 //	@Param        f  						query     int  false  "list record date from"  Format(date)
 //	@Param        t  						query     int  false  "list record date to"  Format(date)
-//	@Success      200						{array}   models.Schedule
+//	@Success      200						{array}   database.Schedule
 //	@Failure      400						{object}  error
 //	@Failure      404						{object}  error
 //	@Failure      500						{object}  error
@@ -119,28 +119,37 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 //	@Router       /schedules/{id}  [get]
 func (c *Controller) ApiGetSchedules(ctx *fiber.Ctx) error {
 	currentTime := time.Now()
-	sixMonthsFromCurrent := currentTime.AddDate(0, 6, 0)
+	yesterday := currentTime.AddDate(0, 0, -1)
+	sixMonthsFromCurrent := yesterday.AddDate(0, 6, 0)
+	log.Printf("Six months from current: %s\n", sixMonthsFromCurrent.Format("2006-01-02"))
 	begin := ctx.QueryInt("b", 0)
 	end := ctx.QueryInt("e", 10)
-	fromQuery := ctx.Query("f", currentTime.Format("2006-01-02"))
+	fromQuery := ctx.Query("f", yesterday.Format("2006-01-02"))
 	from, err := time.Parse("2006-01-02", fromQuery)
 	if err != nil {
-		from = currentTime
+		from = yesterday
 	}
 	toQuery := ctx.Query("t", sixMonthsFromCurrent.Format("2006-01-02"))
 	to, err := time.Parse("2006-01-02", toQuery)
+
 	if err != nil {
 		to = sixMonthsFromCurrent
 	}
 	id := ctx.Params("id")
 
 	if id != "" {
-		schedule := models.Schedule{}
-		database.DB.Db.Where("id = ?", id).First(&schedule)
+		schedule := database.Schedule{}
+		err = database.DB.Db.Model(&database.Schedule{}).Preload("Speakers").Where("id = ?", id).First(&schedule).Error
+		if err != nil {
+			log.Println(err)
+		}
 		return ctx.Status(200).JSON(types.ApiResponse{Data: schedule})
 	} else {
-		schedules := []models.Schedule{}
-		database.DB.Db.Where("start_date_time >= ? AND end_date_time <= ?", from, to).Offset(begin).Limit(end).Find(&schedules)
+		schedules := []database.Schedule{}
+		err = database.DB.Db.Model(&database.Schedule{}).Preload("Speakers").Where("start_date_time >= ? AND start_date_time <= ?", from, to).Offset(begin).Limit(end).Find(&schedules).Error
+		if err != nil {
+			log.Println(err)
+		}
 		return ctx.Status(200).JSON(types.ApiResponse{Data: schedules})
 	}
 }

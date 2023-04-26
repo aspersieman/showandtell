@@ -33,9 +33,11 @@ var EmbedVersion embed.FS
 func main() {
 	var serve bool
 	var migrate bool
+	var seed bool
 	var env string
 	flag.BoolVar(&serve, "serve", false, "Serve the API as well as the API documentation")
-	flag.BoolVar(&migrate, "migrate", false, "Migrate database(s)")
+	flag.BoolVar(&migrate, "migrate", false, "Migrate database")
+	flag.BoolVar(&seed, "seed", false, "Seed database")
 	flag.StringVar(&env, "env", "", "Environment. [create|print]")
 	flag.Parse()
 	if env != "" {
@@ -59,7 +61,11 @@ func main() {
 		cmd.Serve()
 	} else if migrate {
 		cmd.EnvironmentValidate()
-		database.Migrate(true)
+		database.RunMigrations(true)
+	} else if seed {
+		cmd.EnvironmentValidate()
+		database.ConnectDb()
+		database.RunSeeder()
 	} else {
 		flag.PrintDefaults()
 	}

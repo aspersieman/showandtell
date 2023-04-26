@@ -9,6 +9,7 @@ import (
 	_ "bitbucket.org/envirovisionsolutions/showandtell/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -23,17 +24,23 @@ import (
 func Serve() {
 	engine := html.NewFileSystem(http.FS(utils.CmdContext.IndexFile), ".html")
 	appName := utils.EnvGet("APP_NAME", "Show and Tell")
-	enablePrintRoutes := utils.EnvGet("APP_ENV", "production") == "development"
+	isDevelopment := utils.EnvGet("APP_ENV", "production") == "development"
 	app := fiber.New(fiber.Config{
 		Prefork:           true,
 		AppName:           appName,
 		Views:             engine,
-		EnablePrintRoutes: enablePrintRoutes,
+		EnablePrintRoutes: isDevelopment,
 	})
 
 	app.Use(logger.New(logger.Config{
 		TimeFormat: time.RFC3339,
 		Format:     "[${time}] (${ip}) Took: ${latency} ${status} - ${path}\n",
+	}))
+
+	app.Use(cors.New(cors.Config{
+		AllowOriginsFunc: func(origin string) bool {
+			return isDevelopment
+		},
 	}))
 
 	cacheLengthMinutes, err := strconv.ParseInt(utils.EnvGet("APP_WEB_CACHE_LENGTH_MINUTES", "0"), 10, 32)

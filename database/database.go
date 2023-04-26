@@ -29,9 +29,7 @@ func ConnectDb() {
 	if _, err := os.Stat(baseFolder); os.IsNotExist(err) {
 		os.MkdirAll(baseFolder, 0777)
 	}
-	db, err := gorm.Open(sqlite.Open("storage/db/showandtell.sqlite"), &gorm.Config{
-		DisableForeignKeyConstraintWhenMigrating: true,
-	})
+	db, err := gorm.Open(sqlite.Open("storage/db/showandtell.sqlite"), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("Failed to connect to database. \n", err)

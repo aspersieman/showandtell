@@ -117,7 +117,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Schedule"
+                                "$ref": "#/definitions/database.Schedule"
                             }
                         }
                     },
@@ -192,7 +192,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Schedule"
+                                "$ref": "#/definitions/database.Schedule"
                             }
                         }
                     },
@@ -261,7 +261,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/database.User"
                             }
                         }
                     },
@@ -330,7 +330,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/database.User"
                             }
                         }
                     },
@@ -389,19 +389,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "models.Schedule": {
+        "database.Schedule": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -417,7 +405,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "scheduleStatus": {
-                    "$ref": "#/definitions/models.ScheduleStatus"
+                    "$ref": "#/definitions/database.ScheduleStatus"
                 },
                 "schedule_status_id": {
                     "type": "integer"
@@ -433,7 +421,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.ScheduleStatus": {
+        "database.ScheduleStatus": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -453,7 +441,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.User": {
+        "database.User": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -477,6 +465,18 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
                 }
             }
         },
