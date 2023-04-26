@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import Countdown from 'vue3-flip-countdown'
 import router from './router'
+import '../node_modules/flowbite/dist/datepicker.js'
 
 import './assets/base.css'
 

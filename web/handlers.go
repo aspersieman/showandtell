@@ -119,15 +119,14 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 //	@Router       /schedules/{id}  [get]
 func (c *Controller) ApiGetSchedules(ctx *fiber.Ctx) error {
 	currentTime := time.Now()
-	yesterday := currentTime.AddDate(0, 0, -1)
-	sixMonthsFromCurrent := yesterday.AddDate(0, 6, 0)
+	sixMonthsFromCurrent := currentTime.AddDate(0, 6, 0)
 	log.Printf("Six months from current: %s\n", sixMonthsFromCurrent.Format("2006-01-02"))
 	begin := ctx.QueryInt("b", 0)
 	end := ctx.QueryInt("e", 10)
-	fromQuery := ctx.Query("f", yesterday.Format("2006-01-02"))
+	fromQuery := ctx.Query("f", currentTime.Format("2006-01-02"))
 	from, err := time.Parse("2006-01-02", fromQuery)
 	if err != nil {
-		from = yesterday
+		from = currentTime
 	}
 	toQuery := ctx.Query("t", sixMonthsFromCurrent.Format("2006-01-02"))
 	to, err := time.Parse("2006-01-02", toQuery)

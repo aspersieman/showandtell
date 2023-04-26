@@ -41,3 +41,5 @@
  - For a given schedule entry it should allow for:
    - Internal/Private (to EVS) or External
    - Location (i.e. chat room, physical room)
+ - Add route UI transitions
+ - Support reloading page - add fiber route for all pages (catch all)
