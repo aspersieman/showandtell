@@ -1,6 +1,12 @@
+const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}', './node_modules/flowbite/**/*.js'],
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/flowbite/**/*.js',
+    './node_modules/vue-tailwind-datepicker/**/*.js'
+  ],
   darkMode: 'class',
   theme: {
     extend: {
@@ -16,9 +22,11 @@ module.exports = {
           700: '#b91c1c ',
           800: '#991b1b ',
           900: '#7f1d1d '
-        }
+        },
+        'vtd-primary': colors.sky, // Light mode Datepicker color
+        'vtd-secondary': colors.gray // Dark mode Datepicker color
       }
     }
   },
-  plugins: [require('flowbite/plugin')]
+  plugins: [require('flowbite/plugin'), require('@tailwindcss/forms')]
 }

@@ -11,7 +11,7 @@ const scheduleStore = useScheduleStore()
 
 onMounted(() => {
   initFlowbite()
-  scheduleStore.getSchedules()
+  scheduleStore.getSchedulesHome()
 })
 </script>
 

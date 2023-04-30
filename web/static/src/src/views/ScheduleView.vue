@@ -13,7 +13,6 @@ const elapsed = () => {
   <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 mb-auto bg-white dark:bg-gray-900">
     <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
       <div class="flex justify-between w-full border border-gray-300 rounded-md p-2 mx-2">
-        <div if="state && !finished" class="flex justify-center text-xl self-center">Countdown</div>
         <vue3-flip-countdown v-if="!state && !finished" deadline="2023-04-24 08:30:00" :show-labels="false"
           :show-days="false" :show-hours="false" :stop="state" @time-elapsed="elapsed" />
         <div class="flex justify-center mx-auto text-xl self-center" v-else-if="state && !finished">
@@ -29,24 +28,11 @@ const elapsed = () => {
       </div>
     </div>
     <section class="bg-white dark:bg-gray-900 antialiased">
-      <div class="max-w-screen-xl px-4 py-8 mx-auto lg:px-6 sm:py-16 lg:py-24">
+      <div class="max-w-screen-xl px-4 pb-8 mx-auto lg:px-6 sm:pb-16 lg:py-24">
         <div class="max-w-3xl mx-auto text-center">
           <h2 class="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
             Agenda
           </h2>
-
-          <div class="mt-4">
-            <a href="#" title=""
-              class="inline-flex items-center text-lg font-medium text-primary-600 hover:underline dark:text-primary-500">
-              Learn more about our agenda
-              <svg aria-hidden="true" class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
         </div>
 
         <div class="flow-root max-w-3xl mx-auto mt-8 sm:mt-12 lg:mt-16">

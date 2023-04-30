@@ -17,7 +17,7 @@ var EmbedIndex embed.FS
 //go:embed web/static/src/dist/* web/static/src/dist/assets/*
 var EmbedDirStatic embed.FS
 
-//go:embed web/static/img/favicon.ico
+//go:embed web/static/src/public/favicon.ico
 var EmbedFavIcon embed.FS
 
 //go:embed web/static/VERSION

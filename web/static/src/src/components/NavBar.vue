@@ -10,7 +10,6 @@ import { RouterLink } from 'vue-router'
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
           >Show & Tell</span
         >
-        <img src=@/assets/icon.png alt="EVSolutions" class="h-10 ml-2" />
       </RouterLink>
       <div class="flex md:order-2">
         <RouterLink

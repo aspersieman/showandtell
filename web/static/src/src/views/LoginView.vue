@@ -1,16 +1,12 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="login-container">
-    <section class="bg-gray-50/50 dark:bg-gray-900/50">
-      <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="#"
-          class="flex items-center mb-3 text-2xl font-semibold text-gray-900 dark:text-white rounded bg-gray-50 dark:bg-gray-900 p-3"
-        >
-          <img src="@/assets/show-and-tell.png" class="w-8 h-8 mr-2" alt="Show and Tell" />
-          Login
-        </a>
+  <div class="flex login-container flex-row">
+    <section class="left-section flex h-full w-full">&nbsp;</section>
+    <section class="login-section bg-gray-50/50 dark:bg-gray-900/50">
+      <div
+        class="flex-col items-center justify-center self-end px-6 py-8 mx-auto md:h-screen lg:py-0"
+      >
         <div
           class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
         >
@@ -18,7 +14,7 @@
             <h1
               class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
             >
-              Sign in to your account
+              Log in
             </h1>
             <form class="space-y-4 md:space-y-6" action="#">
               <div>
@@ -100,5 +96,19 @@
 .login-container {
   background: url('@/assets/core-values.jpg') no-repeat center center;
   background-size: cover;
+}
+
+.login-section {
+  min-width: 25rem;
+}
+
+@media not all and (min-width: 640px) {
+  .login-section {
+    min-width: 100%;
+  }
+
+  .left-section {
+    width: 0%;
+  }
 }
 </style>

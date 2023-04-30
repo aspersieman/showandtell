@@ -43,3 +43,4 @@
    - Location (i.e. chat room, physical room)
  - Add route UI transitions
  - Support reloading page - add fiber route for all pages (catch all)
+ - Add light/dark mode selection support (save in localstorage)

@@ -70,7 +70,7 @@ func Serve() {
 
 	app.Use(favicon.New(favicon.Config{
 		URL:        "/favicon.ico",
-		File:       "web/static/img/favicon.ico",
+		File:       "web/static/src/public/favicon.ico",
 		FileSystem: http.FS(utils.CmdContext.FavIcon),
 	}))
 

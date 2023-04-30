@@ -2,43 +2,55 @@ basePath: /api/v1
 definitions:
   database.Schedule:
     properties:
-      createdAt:
+      created_at:
         type: string
-      deletedAt:
+      deleted_at:
         $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
       end_date_time:
         type: string
       id:
         type: integer
-      schedule_status_id:
-        type: integer
-      scheduleStatus:
-        $ref: '#/definitions/database.ScheduleStatus'
+      speakers:
+        items:
+          $ref: '#/definitions/database.Speaker'
+        type: array
       start_date_time:
         type: string
       title:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
-  database.ScheduleStatus:
+  database.Speaker:
     properties:
-      createdAt:
+      created_at:
         type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
       id:
         type: integer
-      title:
+      minutes:
+        type: integer
+      name:
         type: string
-      updatedAt:
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
+        type: string
+      updated_at:
         type: string
     type: object
   database.User:
     properties:
-      createdAt:
+      created_at:
         type: string
-      deletedAt:
+      deleted_at:
         $ref: '#/definitions/gorm.DeletedAt'
       email:
         type: string
@@ -49,7 +61,7 @@ definitions:
       password:
         description: Ignore
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
   gorm.DeletedAt:
@@ -74,6 +86,62 @@ definitions:
       expiresIn:
         type: integer
       refreshToken:
+        type: string
+    type: object
+  types.SchedulePostRequest:
+    properties:
+      description:
+        type: string
+      end_date_time:
+        type: string
+      start_date_time:
+        type: string
+      title:
+        type: string
+    type: object
+  types.SchedulePutRequest:
+    properties:
+      description:
+        type: string
+      end_date_time:
+        type: string
+      start_date_time:
+        type: string
+      title:
+        type: string
+    type: object
+  types.SpeakerPostRequest:
+    properties:
+      description:
+        type: string
+      minutes:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
+        type: string
+    type: object
+  types.SpeakerPutRequest:
+    properties:
+      description:
+        type: string
+      minutes:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
         type: string
     type: object
   types.Version:
@@ -128,6 +196,37 @@ paths:
       summary: Login with Keycloak
       tags:
       - auth
+  /schedules:
+    post:
+      consumes:
+      - application/json
+      description: add schedule
+      parameters:
+      - description: Schedule
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SchedulePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add schedule
+      tags:
+      - schedules
   /schedules/:
     get:
       consumes:
@@ -181,6 +280,36 @@ paths:
       tags:
       - schedules
   /schedules/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete schedule
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete schedule
+      tags:
+      - schedules
     get:
       consumes:
       - application/json
@@ -232,6 +361,243 @@ paths:
       summary: List schedules
       tags:
       - schedules
+    put:
+      consumes:
+      - application/json
+      description: edit schedule
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Schedule
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SchedulePutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Edit schedule
+      tags:
+      - schedules
+  /speakers:
+    post:
+      consumes:
+      - application/json
+      description: add speaker
+      parameters:
+      - description: Speaker
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SpeakerPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add speaker
+      tags:
+      - speakers
+  /speakers/:
+    get:
+      consumes:
+      - application/json
+      description: get speakers
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Speaker'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List speakers
+      tags:
+      - speakers
+  /speakers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete speaker
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete speaker
+      tags:
+      - speakers
+    get:
+      consumes:
+      - application/json
+      description: get speakers
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Speaker'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List speakers
+      tags:
+      - speakers
+    put:
+      consumes:
+      - application/json
+      description: edit speaker
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Speaker
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SpeakerPutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Edit speaker
+      tags:
+      - speakers
   /users/:
     get:
       consumes:
