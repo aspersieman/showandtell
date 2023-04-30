@@ -32,7 +32,7 @@ const isToday = (d: Date) => {
     <div class="relative w-full border-b pb-3">
       <span v-if="isToday(schedule.start_date_time)"
         class="bg-primary-100 text-primary-800 text-xs font-medium mr-1 px-2.5 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">Today</span>
-      <RouterLink :to="`/schedule`">
+      <RouterLink :to="`/schedules/${schedule.id}`">
         <time class="text-lg font-semibold text-gray-900 dark:text-white">{{ new
           Date(schedule.start_date_time).toDateString() }} @{{
     new Date(schedule.start_date_time).toLocaleTimeString()
@@ -40,7 +40,7 @@ const isToday = (d: Date) => {
       </RouterLink>
       <RouterLink
         class="text-white float-right mx-1 bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-        to="/schedule">View
+        :to="`/schedules/${schedule.id}`">View
       </RouterLink>
       <div class="flex mt-1">
         <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20">

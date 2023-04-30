@@ -5,7 +5,7 @@ import ScheduleModal from '@/components/ScheduleModal.vue'
 import SpeakerModal from '@/components/SpeakerModal.vue'
 import { useScheduleStore } from '@/stores/schedules'
 import { useSpeakerStore } from '@/stores/speakers'
-import type { ApiSchedule, ApiSpeaker, ScheduleSearchParams } from '@/models/models'
+import type { ApiSchedule, ScheduleSearchParams } from '@/models/models'
 import dayjs from '@/utils/dayjs'
 
 const scheduleStore = useScheduleStore()

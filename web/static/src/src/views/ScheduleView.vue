@@ -1,130 +1,79 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-const state = ref(false)
-const finished = ref(false)
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const elapsed = () => {
-  console.log('Finished!')
-  state.value = false
-  finished.value = true
+import StopWatch from '@/components/StopWatch.vue'
+import { useScheduleStore } from '@/stores/schedules'
+import type { ApiSchedule, ApiSpeaker } from '@/models/models'
+import dayjs from '@/utils/dayjs'
+
+const scheduleStore = useScheduleStore()
+
+const route = useRoute()
+const schedule = ref<ApiSchedule | null>(null)
+const minutesIncrement = ref(0)
+
+interface Speaker extends ApiSpeaker {
+  startTime: string
+  endTime: string
 }
+const speakers = ref<Speaker[]>([])
+
+const getSchedule = (id: number) => {
+  return scheduleStore.getSchedule(id)
+}
+const getTimeEnd = (startDate: Date | null | undefined, minutes: number | null): string => {
+  if (!startDate || minutes === undefined) return ''
+  minutes = minutes ? minutes : 0
+  minutesIncrement.value += minutes
+  return dayjs(startDate).add(minutesIncrement.value, 'minute').format('HH:mm')
+}
+onMounted(async () => {
+  const scheduleId = parseInt(route.params.id[0])
+  schedule.value = await getSchedule(scheduleId)
+
+  schedule.value?.speakers.forEach((speaker) => {
+    speakers.value.push({
+      ...speaker,
+      startTime: getTimeEnd(schedule.value?.start_date_time, 0),
+      endTime: getTimeEnd(schedule.value?.start_date_time, speaker.minutes)
+    })
+  })
+})
 </script>
 <template>
   <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 mb-auto bg-white dark:bg-gray-900">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <div class="flex justify-between w-full border border-gray-300 rounded-md p-2 mx-2">
-        <vue3-flip-countdown v-if="!state && !finished" deadline="2023-04-24 08:30:00" :show-labels="false"
-          :show-days="false" :show-hours="false" :stop="state" @time-elapsed="elapsed" />
-        <div class="flex justify-center mx-auto text-xl self-center" v-else-if="state && !finished">
-          Timer Paused
-        </div>
-        <div class="flex justify-center mx-auto text-xl self-center text-amber-500" v-if="finished">
-          Timer Finished!
-        </div>
-        <button v-if="!finished" type="button" @click="state = !state"
-          class="text-gray-900 bg-white border flex self-center justify-center border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-          {{ state ? 'Start' : 'Stop' }}
-        </button>
-      </div>
-    </div>
-    <section class="bg-white dark:bg-gray-900 antialiased">
-      <div class="max-w-screen-xl px-4 pb-8 mx-auto lg:px-6 sm:pb-16 lg:py-24">
+    <h1 class="text-3xl text-center font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
+      {{ schedule?.title }}
+    </h1>
+    <h1 class="text-1xl text-center font-medium leading-tight tracking-tight text-gray-900 dark:text-white">
+      {{ schedule?.description }}
+    </h1>
+    <section class="bg-white dark:bg-gray-900 antialiased mt-6">
+      <div class="max-w-screen-xl px-4 pb-8 mx-auto">
         <div class="max-w-3xl mx-auto text-center">
-          <h2 class="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
+          <h2 class="text-2xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
             Agenda
           </h2>
         </div>
-
-        <div class="flow-root max-w-3xl mx-auto mt-8 sm:mt-12 lg:mt-16">
-          <div class="-my-4 divide-y divide-gray-200 dark:divide-gray-700">
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                08:00 - 09:00
+        <div class="flow-root max-w-3xl mx-auto mt-8">
+          <div class="-my-4 divide-y divide-gray-200 dark:divide-gray-700 sm:text-md md:text-lg lg:text-xl">
+            <div v-for="(speaker, index) in speakers"
+              class="grid sm:grid-cols-[95px_auto_1fr_150px] md:grid-cols-[125px_auto_1fr_150px] items-center gap-2 py-4 sm:gap-6"
+              :key="index">
+              <p
+                class="justify-self-start font-normal whitespace-nowrap text-left text-gray-500 sm:text-right dark:text-gray-400">
+                {{ speaker.startTime }} -
+                {{ speaker.endTime }}
               </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Opening remarks</a>
+              <h3 class="justify-self-start font-semibold whitespace-nowrap text-gray-900 dark:text-white">
+                <div>{{ speaker.topic }}</div>
               </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                09:00 - 10:00
+              <p class="text-sm justify-self-end text-gray-500 dark:text-gray-400">
+                {{ speaker.name }}
               </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Bergside LLC: Controlling the video traffic flows</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                10:00 - 11:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Flowbite - An Open Framework for Forensic Watermarking</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                11:00 - 12:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Coffee Break</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                12:00 - 13:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Scaling your brand from €0 to multimillion euros</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                13:00 - 14:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Updates from the Open Source Multimedia community</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                14:00 - 15:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Exploring the balance between customer acquisition and retention</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                15:00 - 16:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Flowbite - An Open Framework for Forensic Watermarking</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                16:00 - 14:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Scaling your brand from €0 to multimillion euros</a>
-              </h3>
-            </div>
-
-            <div class="flex flex-col gap-2 py-4 sm:gap-6 sm:flex-row sm:items-center">
-              <p class="w-32 text-lg font-normal text-gray-500 sm:text-right dark:text-gray-400 shrink-0">
-                17:00 - 14:00
-              </p>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                <a href="#" class="hover:underline">Drinks & networking</a>
-              </h3>
+              <!-- <p class="justify-self-end"><stop-watch :max="speaker.minutes" /></p> -->
+              <p class="justify-self-end"><stop-watch :max="1" /></p>
             </div>
           </div>
         </div>

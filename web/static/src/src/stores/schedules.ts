@@ -22,6 +22,13 @@ export const useScheduleStore = defineStore('scheduleStore', () => {
     return items
   }
 
+  async function getSchedule(id: number) {
+    const response = await fetch(query(`/api/v1/schedules/${id}`))
+    const data = await response.json()
+    const item = data?.data
+    return item as ApiSchedule
+  }
+
   async function getSchedulesHome(params: Object = {}) {
     const items: ApiSchedule[] = await getSchedules(params)
     schedulesHome.value = items
@@ -75,6 +82,7 @@ export const useScheduleStore = defineStore('scheduleStore', () => {
     schedulesHome,
     schedulesAdmin,
     scheduleEdit,
+    getSchedule,
     getSchedules,
     getSchedulesAdmin,
     getSchedulesHome,

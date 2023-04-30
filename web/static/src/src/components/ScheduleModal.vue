@@ -23,7 +23,9 @@ const scheduleStore = useScheduleStore()
 const speakerStore = useSpeakerStore()
 
 const title = ref('')
-const description = ref('')
+const description = ref(
+  'Please wait until the speaker has completed their presentation for any remarks/questions. Add a comment or question below.'
+)
 const startDate = ref('')
 const startTime = ref('15:00')
 const endTime = ref('16:00')

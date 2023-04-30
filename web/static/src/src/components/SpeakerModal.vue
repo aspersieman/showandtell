@@ -55,7 +55,7 @@ const addSpeaker = () => {
         topic: topic.value,
         description: description.value,
         order: 1,
-        minutes: minutes.value,
+        minutes: parseInt(minutes.value),
         schedule_id: speakerStore.speakerAddSchedule?.id,
         private: isPrivate.value
       })
@@ -79,7 +79,7 @@ const updateSpeaker = () => {
           topic: topic.value,
           description: description.value,
           order: order,
-          minutes: minutes.value,
+          minutes: parseInt(minutes.value),
           schedule_id: scheduleId,
           private: isPrivate.value
         })
