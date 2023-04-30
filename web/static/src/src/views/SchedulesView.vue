@@ -124,7 +124,7 @@ onMounted(() => {
                 <tr v-for="(schedule, index) in scheduleStore.schedulesAdmin"
                   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                    {{ schedule.title }}
+                    <RouterLink :to="`/schedules/${schedule.id}`">{{ schedule.title }} </RouterLink>
                   </th>
                   <td class="px-3 py-2 text-center">{{ schedule.speakers.length }}</td>
                   <td class="px-3 py-2 text-xs">

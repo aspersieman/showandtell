@@ -88,7 +88,6 @@ const calculate = (timestamp: number) => {
   if (progress.value >= 100 || minutes >= props.max) {
     progress.value = 100
   }
-  console.log('progress', progress.value)
   if (progress.value <= 60) {
     progressColour.value = 'bg-blue-600'
   } else if (progress.value <= 80) {

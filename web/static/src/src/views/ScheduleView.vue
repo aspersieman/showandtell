@@ -59,21 +59,20 @@ onMounted(async () => {
         <div class="flow-root max-w-3xl mx-auto mt-8">
           <div class="-my-4 divide-y divide-gray-200 dark:divide-gray-700 sm:text-md md:text-lg lg:text-xl">
             <div v-for="(speaker, index) in speakers"
-              class="grid sm:grid-cols-[95px_auto_1fr_150px] md:grid-cols-[125px_auto_1fr_150px] items-center gap-2 py-4 sm:gap-6"
+              class="grid sm:grid-cols-[95px_auto_150px] md:grid-cols-[125px_auto_150px] items-center gap-2 py-4 sm:gap-6"
               :key="index">
-              <p
+              <div
                 class="justify-self-start font-normal whitespace-nowrap text-left text-gray-500 sm:text-right dark:text-gray-400">
                 {{ speaker.startTime }} -
                 {{ speaker.endTime }}
-              </p>
-              <h3 class="justify-self-start font-semibold whitespace-nowrap text-gray-900 dark:text-white">
+                <div class="text-sm text-left text-gray-500 dark:text-gray-400">
+                  {{ speaker.name }}
+                </div>
+              </div>
+              <h3 class="justify-self-start font-semibold text-gray-900 dark:text-white">
                 <div>{{ speaker.topic }}</div>
               </h3>
-              <p class="text-sm justify-self-end text-gray-500 dark:text-gray-400">
-                {{ speaker.name }}
-              </p>
-              <!-- <p class="justify-self-end"><stop-watch :max="speaker.minutes" /></p> -->
-              <p class="justify-self-end"><stop-watch :max="1" /></p>
+              <p class="justify-self-end"><stop-watch :max="speaker.minutes" /></p>
             </div>
           </div>
         </div>
