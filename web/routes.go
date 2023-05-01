@@ -15,6 +15,7 @@ func SetupRoutes(app *fiber.App, keycloak *auth.Keycloak) {
 
 	v1 := api.Group("/v1")
 	v1.Post("/auth/login", controller.ApiAuthLogin)
+	v1.Post("/auth/logout", controller.ApiAuthLogout)
 	v1.Get("/schedules/:id<int>?", controller.ApiGetSchedules)
 	v1.Get("/speakers/:id<int>?", controller.ApiGetSpeakers)
 	v1.Get("/version", controller.ApiGetVersion)

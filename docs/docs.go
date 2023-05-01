@@ -61,6 +61,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/logout": {
+            "post": {
+                "description": "Logout from Keycloak",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout from Keycloak",
+                "parameters": [
+                    {
+                        "description": "Logout request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.LogoutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/schedules": {
             "post": {
                 "description": "add schedule",
@@ -930,6 +972,155 @@ const docTemplate = `{
                 }
             }
         },
+        "types.AccessTokenClaims": {
+            "type": "object",
+            "properties": {
+                "acr": {
+                    "type": "string"
+                },
+                "allowed-origins": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "aud": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "azp": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "exp": {
+                    "type": "integer"
+                },
+                "family_name": {
+                    "type": "string"
+                },
+                "given_name": {
+                    "type": "string"
+                },
+                "iat": {
+                    "type": "integer"
+                },
+                "iss": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "preferred_username": {
+                    "type": "string"
+                },
+                "realm_access": {
+                    "$ref": "#/definitions/types.AccessTokenRealmAccess"
+                },
+                "resource_access": {
+                    "$ref": "#/definitions/types.AccessTokenResourceAccess"
+                },
+                "scope": {
+                    "type": "string"
+                },
+                "session_state": {
+                    "type": "string"
+                },
+                "sub": {
+                    "type": "string"
+                },
+                "typ": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenHeader": {
+            "type": "object",
+            "properties": {
+                "alg": {
+                    "type": "string"
+                },
+                "kid": {
+                    "type": "string"
+                },
+                "typ": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenMethod": {
+            "type": "object",
+            "properties": {
+                "hash": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenRealmAccess": {
+            "type": "object",
+            "properties": {
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "types.AccessTokenResourceAccess": {
+            "type": "object",
+            "properties": {
+                "resources": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "types.ApiResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Data\nexample: data"
+                }
+            }
+        },
+        "types.DecodedAccessToken": {
+            "type": "object",
+            "properties": {
+                "claims": {
+                    "$ref": "#/definitions/types.AccessTokenClaims"
+                },
+                "header": {
+                    "$ref": "#/definitions/types.AccessTokenHeader"
+                },
+                "method": {
+                    "$ref": "#/definitions/types.AccessTokenMethod"
+                },
+                "raw": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
         "types.LoginRequest": {
             "type": "object",
             "properties": {
@@ -947,10 +1138,21 @@ const docTemplate = `{
                 "accessToken": {
                     "type": "string"
                 },
+                "decoded": {
+                    "$ref": "#/definitions/types.DecodedAccessToken"
+                },
                 "expiresIn": {
                     "type": "integer"
                 },
                 "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.LogoutRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
                     "type": "string"
                 }
             }

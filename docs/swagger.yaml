@@ -72,6 +72,105 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  types.AccessTokenClaims:
+    properties:
+      acr:
+        type: string
+      allowed-origins:
+        items:
+          type: string
+        type: array
+      aud:
+        items:
+          type: string
+        type: array
+      azp:
+        type: string
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      exp:
+        type: integer
+      family_name:
+        type: string
+      given_name:
+        type: string
+      iat:
+        type: integer
+      iss:
+        type: string
+      name:
+        type: string
+      preferred_username:
+        type: string
+      realm_access:
+        $ref: '#/definitions/types.AccessTokenRealmAccess'
+      resource_access:
+        $ref: '#/definitions/types.AccessTokenResourceAccess'
+      scope:
+        type: string
+      session_state:
+        type: string
+      sub:
+        type: string
+      typ:
+        type: string
+    type: object
+  types.AccessTokenHeader:
+    properties:
+      alg:
+        type: string
+      kid:
+        type: string
+      typ:
+        type: string
+    type: object
+  types.AccessTokenMethod:
+    properties:
+      hash:
+        type: integer
+      name:
+        type: string
+    type: object
+  types.AccessTokenRealmAccess:
+    properties:
+      roles:
+        items:
+          type: string
+        type: array
+    type: object
+  types.AccessTokenResourceAccess:
+    properties:
+      resources:
+        items:
+          items:
+            type: string
+          type: array
+        type: array
+    type: object
+  types.ApiResponse:
+    properties:
+      data:
+        description: |-
+          Data
+          example: data
+    type: object
+  types.DecodedAccessToken:
+    properties:
+      claims:
+        $ref: '#/definitions/types.AccessTokenClaims'
+      header:
+        $ref: '#/definitions/types.AccessTokenHeader'
+      method:
+        $ref: '#/definitions/types.AccessTokenMethod'
+      raw:
+        type: string
+      signature:
+        type: string
+      valid:
+        type: boolean
+    type: object
   types.LoginRequest:
     properties:
       password:
@@ -83,9 +182,16 @@ definitions:
     properties:
       accessToken:
         type: string
+      decoded:
+        $ref: '#/definitions/types.DecodedAccessToken'
       expiresIn:
         type: integer
       refreshToken:
+        type: string
+    type: object
+  types.LogoutRequest:
+    properties:
+      refresh_token:
         type: string
     type: object
   types.SchedulePostRequest:
@@ -194,6 +300,34 @@ paths:
           description: Forbidden
           schema: {}
       summary: Login with Keycloak
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout from Keycloak
+      parameters:
+      - description: Logout request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ApiResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Logout from Keycloak
       tags:
       - auth
   /schedules:

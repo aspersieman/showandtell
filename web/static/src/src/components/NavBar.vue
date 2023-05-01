@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { useAuthenticationStore } from '@/stores/authentication'
+import UserAvatar from '@/components/UserAvatar.vue'
+
+const authenticationStore = useAuthenticationStore()
 </script>
 
 <template>
@@ -13,10 +17,16 @@ import { RouterLink } from 'vue-router'
       </RouterLink>
       <div class="flex md:order-2">
         <RouterLink
+          v-if="!authenticationStore.isLoggedIn"
           class="text-white mx-1 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           to="/login"
           >Login
         </RouterLink>
+        <user-avatar
+          v-else
+          :username="authenticationStore.user.name"
+          :email="authenticationStore.user.email"
+        />
         <button
           data-collapse-toggle="navbar-cta"
           type="button"
@@ -52,13 +62,6 @@ import { RouterLink } from 'vue-router'
               class="nav-link block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary-700 md:p-0 md:dark:hover:text-primary-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               to="/"
               >Home
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink
-              class="nav-link block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary-700 md:p-0 md:dark:hover:text-primary-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              to="/schedules"
-              >Schedules
             </RouterLink>
           </li>
           <li>

@@ -2,6 +2,8 @@ package web
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -59,13 +61,52 @@ func (c *Controller) ApiAuthLogin(ctx *fiber.Ctx) error {
 	if err != nil {
 		return ctx.Status(fiber.StatusForbidden).JSON(types.ApiResponse{Data: err.Error()})
 	}
+	keycloak := auth.NewKeycloak()
+	decodedToken, _, err := keycloak.Gocloak.DecodeAccessToken(context.Background(), jwt.AccessToken, keycloak.Realm)
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(types.ApiResponse{Data: fmt.Sprintf("Invalid or malformed token: %s", err.Error())})
+	}
+	decodedAccessToken := types.DecodedAccessToken{}
+	tokenData, _ := json.Marshal(decodedToken)
+	_ = json.Unmarshal(tokenData, &decodedAccessToken)
 	ls := &types.LoginResponse{
 		AccessToken:  jwt.AccessToken,
 		RefreshToken: jwt.RefreshToken,
 		ExpiresIn:    jwt.ExpiresIn,
+		Decoded:      decodedAccessToken,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(types.ApiResponse{Data: ls})
+}
+
+// ApiAuthLogout Logout from Keycloak
+//
+//	@Summary      Logout from Keycloak
+//	@Description  Logout from Keycloak
+//	@Tags         auth
+//	@Accept       json
+//	@Produce      json
+//	@Param        request 			body      types.LogoutRequest  true  "Logout request"
+//	@Success      200						{object}  types.ApiResponse
+//	@Failure      400						{object}  error
+//	@Failure      403						{object}  error
+//	@Router       /auth/logout 			[post]
+func (c *Controller) ApiAuthLogout(ctx *fiber.Ctx) error {
+	lr := types.LogoutRequest{}
+	if err := ctx.BodyParser(&lr); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(types.ApiResponse{Data: "Bad request"})
+	}
+
+	err := c.Keycloak.Gocloak.Logout(context.Background(),
+		c.Keycloak.ClientId,
+		c.Keycloak.ClientSecret,
+		c.Keycloak.Realm,
+		lr.RefreshToken,
+	)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(types.ApiResponse{Data: err.Error()})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(types.ApiResponse{Data: "logged out"})
 }
 
 // ApiGetUsers lists a single or a list of user records

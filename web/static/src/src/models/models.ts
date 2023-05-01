@@ -1,3 +1,69 @@
+interface ApiLogin {
+  username: string
+  password: string
+}
+interface ApiLogout {
+  refresh_token: string | undefined
+}
+
+interface AccessTokenMethod {
+  name: string
+  hash: number
+}
+interface AccessTokenHeader {
+  alg: string
+  kid: string
+  typ: string
+}
+interface AccessTokenRealmAccess {
+  roles: string[]
+}
+interface AccessTokenResourceAccess {
+  resources: string[][]
+}
+interface AccessTokenClaims {
+  acr: string
+  allowed_origins: string[]
+  aud: string[]
+  azp: string
+  email: string
+  email_verified: boolean
+  exp: number
+  family_name: string
+  given_name: string
+  iat: number
+  iss: string
+  name: string
+  preferred_username: string
+  realm_access: AccessTokenRealmAccess
+  resource_access: AccessTokenResourceAccess
+  scope: string
+  session_state: string
+  sub: string
+  typ: string
+}
+interface DecodedAccessToken {
+  raw: string
+  method: AccessTokenMethod
+  header: AccessTokenHeader
+  claims: AccessTokenClaims
+  singature: string
+  valid: boolean
+}
+interface Token {
+  accessToken: string
+  refreshToken: string
+  expiresIn: number
+  decoded: DecodedAccessToken
+}
+interface User {
+  email: string
+  name: string
+  username: string
+  realm_access: AccessTokenRealmAccess
+  resource_access: AccessTokenResourceAccess
+}
+
 interface ApiSpeaker {
   id: number
   created_at: Date
@@ -74,5 +140,9 @@ export type {
   ApiSchedule,
   ScheduleAdd,
   ScheduleUpdate,
-  ScheduleSearchParams
+  ScheduleSearchParams,
+  ApiLogin,
+  ApiLogout,
+  Token,
+  User
 }
