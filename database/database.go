@@ -36,7 +36,8 @@ func ConnectDb() {
 		log.Fatal("Failed to connect to database. \n", err)
 		os.Exit(2)
 	}
-	db.Logger = logger.Default.LogMode(logLevel)
+	// TODO: uncomment and implement .env based logging
+	// db.Logger = logger.Default.LogMode(logLevel)
 
 	DB = Db{Db: db}
 }

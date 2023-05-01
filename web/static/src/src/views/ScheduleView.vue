@@ -28,6 +28,7 @@ const getTimeEnd = (startDate: Date | null | undefined, minutes: number | null):
   minutesIncrement.value += minutes
   return dayjs(startDate).add(minutesIncrement.value, 'minute').format('HH:mm')
 }
+
 onMounted(async () => {
   const scheduleId = parseInt(route.params.id[0])
   schedule.value = await getSchedule(scheduleId)
@@ -72,7 +73,9 @@ onMounted(async () => {
               <h3 class="justify-self-start font-semibold text-gray-900 dark:text-white">
                 <div>{{ speaker.topic }}</div>
               </h3>
-              <p class="justify-self-end"><stop-watch :max="speaker.minutes" /></p>
+              <p class="justify-self-end">
+                <stop-watch :max="speaker.minutes" channel="speaker" :socket-id="speaker.id" />
+              </p>
             </div>
           </div>
         </div>

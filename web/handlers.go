@@ -122,7 +122,6 @@ func (c *Controller) ApiGetUsers(ctx *fiber.Ctx) error {
 func (c *Controller) ApiGetSchedules(ctx *fiber.Ctx) error {
 	currentTime := time.Now()
 	sixMonthsFromCurrent := currentTime.AddDate(0, 6, 0)
-	log.Printf("Six months from current: %s\n", sixMonthsFromCurrent.Format("2006-01-02"))
 	fromQuery := ctx.Query("f", currentTime.Format("2006-01-02"))
 	from, err := time.Parse("2006-01-02", fromQuery)
 	if err != nil {

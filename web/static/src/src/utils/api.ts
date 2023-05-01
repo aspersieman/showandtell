@@ -1,4 +1,10 @@
-export function getApiBaseUrl() {
+export function getApiBaseUrl(mode: string = 'http') {
+  if (mode === 'http') {
+    return 'http://localhost:8021'
+  }
+  if (mode === 'ws') {
+    return 'ws://localhost:8021'
+  }
   return 'http://localhost:8021'
 }
 
