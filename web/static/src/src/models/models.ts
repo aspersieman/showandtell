@@ -72,6 +72,7 @@ interface ApiSpeaker {
   name: string
   topic: string
   description: string
+  audience: string
   order: number
   minutes: number
   schedule_id: number
@@ -82,6 +83,7 @@ interface SpeakerAdd {
   name: string
   topic: string
   description: string
+  audience: string
   order: number
   minutes: number
   schedule_id: number
@@ -93,6 +95,7 @@ interface SpeakerUpdate {
   name: string
   topic: string
   description: string
+  audience: string
   order: number
   minutes: number
   schedule_id: number

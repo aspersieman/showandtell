@@ -63,8 +63,7 @@ func runHub() {
 func Serve() {
 	engine := html.NewFileSystem(http.FS(utils.CmdContext.IndexFile), ".html")
 	appName := utils.EnvGet("APP_NAME", "Show and Tell")
-	// isDevelopment := utils.EnvGet("APP_ENV", "production") == "development"
-	isDevelopment := false
+	isDevelopment := utils.EnvGet("APP_ENV", "production") == "development"
 	app := fiber.New(fiber.Config{
 		Prefork:           false, // Not compatible with websockets
 		AppName:           appName,

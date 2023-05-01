@@ -7,7 +7,8 @@ import { getApiBaseUrl } from '@/utils/api'
 const props = defineProps({
   max: { type: Number, default: 0 },
   channel: String,
-  socketId: Number
+  socketId: Number,
+  showControls: { type: Boolean, default: false }
 })
 
 const emit = defineEmits<{
@@ -204,7 +205,7 @@ onBeforeUnmount(() => {
   <div class="flex justify-between">
     <div class="font-mono time mr-1">{{ time }}</div>
     <button
-      v-if="!isRunning"
+      v-if="!isRunning && props.showControls"
       @click="pause()"
       type="button"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -214,7 +215,7 @@ onBeforeUnmount(() => {
       </svg>
     </button>
     <button
-      v-else
+      v-if="isRunning && props.showControls"
       @click="pause()"
       type="button"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -226,6 +227,7 @@ onBeforeUnmount(() => {
       </svg>
     </button>
     <button
+      v-if="props.showControls"
       @click="reset()"
       type="button"
       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"

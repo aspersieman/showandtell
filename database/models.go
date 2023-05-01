@@ -40,6 +40,7 @@ type Speaker struct {
 	Name        string    `json:"name"`
 	Topic       string    `json:"topic"`
 	Description string    `json:"description"`
+	Audience    string    `json:"audience"`
 	Order       int       `json:"order"`
 	Minutes     int       `json:"minutes"`
 	ScheduleId  int       `json:"schedule_id"`

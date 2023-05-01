@@ -28,19 +28,23 @@ export const useAuthenticationStore = defineStore('authenticationStore', () => {
     const data = await response.json()
     const tokens = data?.data
     if (response.status === 200) {
-      token.value = {
+      const tokenRecord = {
         accessToken: tokens?.accessToken,
         refreshToken: tokens?.refreshToken,
         expiresIn: tokens?.expiresIn,
         decoded: tokens?.decoded
       }
-      user.value = {
+      localStorage.setItem('token', JSON.stringify(tokenRecord))
+      token.value = tokenRecord
+      const userRecord = {
         email: tokens?.decoded?.claims.email,
         name: tokens?.decoded?.claims.name,
         username: tokens?.decoded?.claims.preferred_username,
         realm_access: tokens?.decoded?.claims.realm_access,
         resource_access: tokens?.decoded?.claims.resource_access
       }
+      user.value = userRecord
+      localStorage.setItem('user', JSON.stringify(userRecord))
 
       isLoggedIn.value = true
     }

@@ -25,6 +25,8 @@ definitions:
     type: object
   database.Speaker:
     properties:
+      audience:
+        type: string
       created_at:
         type: string
       description:
@@ -218,6 +220,8 @@ definitions:
     type: object
   types.SpeakerPostRequest:
     properties:
+      audience:
+        type: string
       description:
         type: string
       minutes:
@@ -235,6 +239,8 @@ definitions:
     type: object
   types.SpeakerPutRequest:
     properties:
+      audience:
+        type: string
       description:
         type: string
       minutes:

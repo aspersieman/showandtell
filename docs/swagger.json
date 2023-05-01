@@ -894,6 +894,9 @@
         "database.Speaker": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1187,6 +1190,9 @@
         "types.SpeakerPostRequest": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -1213,6 +1219,9 @@
         "types.SpeakerPutRequest": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },

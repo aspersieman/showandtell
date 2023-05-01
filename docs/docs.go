@@ -901,6 +901,9 @@ const docTemplate = `{
         "database.Speaker": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1194,6 +1197,9 @@ const docTemplate = `{
         "types.SpeakerPostRequest": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -1220,6 +1226,9 @@ const docTemplate = `{
         "types.SpeakerPutRequest": {
             "type": "object",
             "properties": {
+                "audience": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
