@@ -24,8 +24,8 @@ const authenticationStore = useAuthenticationStore()
         </RouterLink>
         <user-avatar
           v-else
-          :username="authenticationStore.user.name"
-          :email="authenticationStore.user.email"
+          :username="authenticationStore.user?.name"
+          :email="authenticationStore.user?.email"
         />
         <button
           data-collapse-toggle="navbar-cta"

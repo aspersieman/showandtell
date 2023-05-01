@@ -89,9 +89,11 @@ const deleteSpeaker = (id: number) => {
       emit('speakerDeleted', true)
     })
     .then(() => {
-      scheduleStore.scheduleEdit.speakers = scheduleStore.scheduleEdit?.speakers.filter(
-        (speaker) => speaker.id !== id
-      )
+      if (scheduleStore.scheduleEdit) {
+        scheduleStore.scheduleEdit.speakers = scheduleStore.scheduleEdit?.speakers.filter(
+          (speaker) => speaker.id !== id
+        )
+      }
     })
 }
 const editSpeaker = (speaker: ApiSpeaker) => {
