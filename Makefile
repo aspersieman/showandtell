@@ -16,6 +16,7 @@ build: static
 serve: static
 	@go run main.go --serve
 
+
 static:
 	@cd $(STATIC_DIR) && npm run build
 

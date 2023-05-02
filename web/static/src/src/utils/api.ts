@@ -1,11 +1,12 @@
 export function getApiBaseUrl(mode: string = 'http') {
+  console.log('getApiBaseUrl: ', import.meta.env)
   if (mode === 'http') {
-    return 'http://localhost:8021'
+    return 'http://showandtell.local:8021'
   }
   if (mode === 'ws') {
-    return 'ws://localhost:8021'
+    return 'ws://showandtell.local:8021'
   }
-  return 'http://localhost:8021'
+  return 'http://showandtell.local:8021'
 }
 
 export function query(url: string, params: Object | never = {}) {

@@ -44,3 +44,4 @@
  - Add route UI transitions
  - Support reloading page - add fiber route for all pages (catch all)
  - Add light/dark mode selection support (save in localstorage)
+ - For client side ui inject 'VITE_' before selected variables and copy to web/static/src

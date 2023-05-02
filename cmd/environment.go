@@ -27,6 +27,9 @@ APP_PORT=8020
 APP_ENV=production
 APP_WEB_CACHE_LENGTH_MINUTES=2
 
+VIRTUAL_HOST=showandtell.local
+NGINX_PORT=80
+
 KEYCLOAK_BASE_URL=https://auth.evsolutions.co.za/auth/
 KEYCLOAK_REALM=evs
 KEYCLOAK_CLIENT_ID=showandtell
