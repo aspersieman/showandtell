@@ -1,0 +1,1315 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "EVS Show and Tell collaboration system",
+        "title": "Show and Tell",
+        "contact": {
+            "name": "Support",
+            "email": "support@evsolutions.biz"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8021",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Login to Keycloak with username and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login with Keycloak",
+                "parameters": [
+                    {
+                        "description": "Login request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "description": "Logout from Keycloak",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout from Keycloak",
+                "parameters": [
+                    {
+                        "description": "Logout request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.LogoutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/auth/token": {
+            "post": {
+                "description": "Get JWT Keycloak token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get JWT Keycloak token",
+                "parameters": [
+                    {
+                        "description": "Token request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.TokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/schedules": {
+            "post": {
+                "description": "add schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Add schedule",
+                "parameters": [
+                    {
+                        "description": "Schedule",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.SchedulePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Schedule"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/schedules/": {
+            "get": {
+                "description": "get schedules",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "List schedules",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Schedule"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/schedules/{id}": {
+            "get": {
+                "description": "get schedules",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "List schedules",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Schedule"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "put": {
+                "description": "edit schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Edit schedule",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "request id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Schedule",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.SchedulePutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Schedule"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Delete schedule",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "request id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Schedule"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/speakers": {
+            "post": {
+                "description": "add speaker",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "Add speaker",
+                "parameters": [
+                    {
+                        "description": "Speaker",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.SpeakerPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Speaker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/speakers/": {
+            "get": {
+                "description": "get speakers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "List speakers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Speaker"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/speakers/{id}": {
+            "get": {
+                "description": "get speakers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "List speakers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date from",
+                        "name": "f",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "date",
+                        "description": "list record date to",
+                        "name": "t",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Speaker"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "put": {
+                "description": "edit speaker",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "Edit speaker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "request id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Speaker",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.SpeakerPutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Speaker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete speaker",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "Delete speaker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "request id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Speaker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "description": "get users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "List users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Authorization header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "get users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "List users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Authorization header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "find by id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position begin",
+                        "name": "b",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "list record position end",
+                        "name": "e",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "description": "get versions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "versions"
+                ],
+                "summary": "List versions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Version"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "database.Schedule": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "speakers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.Speaker"
+                    }
+                },
+                "start_date_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Speaker": {
+            "type": "object",
+            "properties": {
+                "audience": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "minutes": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "order": {
+                    "type": "integer"
+                },
+                "private": {
+                    "type": "boolean"
+                },
+                "schedule_id": {
+                    "type": "integer"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Ignore",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.AccessTokenClaims": {
+            "type": "object",
+            "properties": {
+                "acr": {
+                    "type": "string"
+                },
+                "allowed-origins": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "aud": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "azp": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "exp": {
+                    "type": "integer"
+                },
+                "family_name": {
+                    "type": "string"
+                },
+                "given_name": {
+                    "type": "string"
+                },
+                "iat": {
+                    "type": "integer"
+                },
+                "iss": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "preferred_username": {
+                    "type": "string"
+                },
+                "realm_access": {
+                    "$ref": "#/definitions/types.AccessTokenRealmAccess"
+                },
+                "resource_access": {
+                    "$ref": "#/definitions/types.AccessTokenResourceAccess"
+                },
+                "scope": {
+                    "type": "string"
+                },
+                "session_state": {
+                    "type": "string"
+                },
+                "sub": {
+                    "type": "string"
+                },
+                "typ": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenHeader": {
+            "type": "object",
+            "properties": {
+                "alg": {
+                    "type": "string"
+                },
+                "kid": {
+                    "type": "string"
+                },
+                "typ": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenMethod": {
+            "type": "object",
+            "properties": {
+                "hash": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.AccessTokenRealmAccess": {
+            "type": "object",
+            "properties": {
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "types.AccessTokenResourceAccess": {
+            "type": "object",
+            "properties": {
+                "resources": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "types.ApiResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Data\nexample: data"
+                }
+            }
+        },
+        "types.DecodedAccessToken": {
+            "type": "object",
+            "properties": {
+                "claims": {
+                    "$ref": "#/definitions/types.AccessTokenClaims"
+                },
+                "header": {
+                    "$ref": "#/definitions/types.AccessTokenHeader"
+                },
+                "method": {
+                    "$ref": "#/definitions/types.AccessTokenMethod"
+                },
+                "raw": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "decoded": {
+                    "$ref": "#/definitions/types.DecodedAccessToken"
+                },
+                "expiresIn": {
+                    "type": "integer"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.LogoutRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.SchedulePostRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_date_time": {
+                    "type": "string"
+                },
+                "start_date_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.SchedulePutRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_date_time": {
+                    "type": "string"
+                },
+                "start_date_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.SpeakerPostRequest": {
+            "type": "object",
+            "properties": {
+                "audience": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "minutes": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "order": {
+                    "type": "integer"
+                },
+                "private": {
+                    "type": "boolean"
+                },
+                "schedule_id": {
+                    "type": "integer"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.SpeakerPutRequest": {
+            "type": "object",
+            "properties": {
+                "audience": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "minutes": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "order": {
+                    "type": "integer"
+                },
+                "private": {
+                    "type": "boolean"
+                },
+                "schedule_id": {
+                    "type": "integer"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.TokenRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.Version": {
+            "type": "object",
+            "properties": {
+                "latest_version": {
+                    "description": "LatestVersion\nexample: 2.0.0",
+                    "type": "string"
+                },
+                "supported_versions": {
+                    "description": "SupportedVersions\nexample: [1.8.0, 1.9.0]",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

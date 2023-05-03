@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  showandtell.go:
+    restart: "unless-stopped"
+    command: sh -c "make serve"
+  showandtell.nginx:
+    restart: "unless-stopped"
+    environment:
+      VIRTUAL_HOST: "${VIRTUAL_HOST}"
+    networks:
+      - default
+      - frontman
+
+networks:
+  frontman:
+    external: true

@@ -1,0 +1,896 @@
+basePath: /api/v1
+definitions:
+  database.Schedule:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      end_date_time:
+        type: string
+      id:
+        type: integer
+      speakers:
+        items:
+          $ref: '#/definitions/database.Speaker'
+        type: array
+      start_date_time:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  database.Speaker:
+    properties:
+      audience:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      minutes:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  database.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        description: Ignore
+        type: string
+      updated_at:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  types.AccessTokenClaims:
+    properties:
+      acr:
+        type: string
+      allowed-origins:
+        items:
+          type: string
+        type: array
+      aud:
+        items:
+          type: string
+        type: array
+      azp:
+        type: string
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      exp:
+        type: integer
+      family_name:
+        type: string
+      given_name:
+        type: string
+      iat:
+        type: integer
+      iss:
+        type: string
+      name:
+        type: string
+      preferred_username:
+        type: string
+      realm_access:
+        $ref: '#/definitions/types.AccessTokenRealmAccess'
+      resource_access:
+        $ref: '#/definitions/types.AccessTokenResourceAccess'
+      scope:
+        type: string
+      session_state:
+        type: string
+      sub:
+        type: string
+      typ:
+        type: string
+    type: object
+  types.AccessTokenHeader:
+    properties:
+      alg:
+        type: string
+      kid:
+        type: string
+      typ:
+        type: string
+    type: object
+  types.AccessTokenMethod:
+    properties:
+      hash:
+        type: integer
+      name:
+        type: string
+    type: object
+  types.AccessTokenRealmAccess:
+    properties:
+      roles:
+        items:
+          type: string
+        type: array
+    type: object
+  types.AccessTokenResourceAccess:
+    properties:
+      resources:
+        items:
+          items:
+            type: string
+          type: array
+        type: array
+    type: object
+  types.ApiResponse:
+    properties:
+      data:
+        description: |-
+          Data
+          example: data
+    type: object
+  types.DecodedAccessToken:
+    properties:
+      claims:
+        $ref: '#/definitions/types.AccessTokenClaims'
+      header:
+        $ref: '#/definitions/types.AccessTokenHeader'
+      method:
+        $ref: '#/definitions/types.AccessTokenMethod'
+      raw:
+        type: string
+      signature:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  types.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  types.LoginResponse:
+    properties:
+      accessToken:
+        type: string
+      decoded:
+        $ref: '#/definitions/types.DecodedAccessToken'
+      expiresIn:
+        type: integer
+      refreshToken:
+        type: string
+    type: object
+  types.LogoutRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  types.SchedulePostRequest:
+    properties:
+      description:
+        type: string
+      end_date_time:
+        type: string
+      start_date_time:
+        type: string
+      title:
+        type: string
+    type: object
+  types.SchedulePutRequest:
+    properties:
+      description:
+        type: string
+      end_date_time:
+        type: string
+      start_date_time:
+        type: string
+      title:
+        type: string
+    type: object
+  types.SpeakerPostRequest:
+    properties:
+      audience:
+        type: string
+      description:
+        type: string
+      minutes:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
+        type: string
+    type: object
+  types.SpeakerPutRequest:
+    properties:
+      audience:
+        type: string
+      description:
+        type: string
+      minutes:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      private:
+        type: boolean
+      schedule_id:
+        type: integer
+      topic:
+        type: string
+    type: object
+  types.TokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  types.Version:
+    properties:
+      latest_version:
+        description: |-
+          LatestVersion
+          example: 2.0.0
+        type: string
+      supported_versions:
+        description: |-
+          SupportedVersions
+          example: [1.8.0, 1.9.0]
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8021
+info:
+  contact:
+    email: support@evsolutions.biz
+    name: Support
+  description: EVS Show and Tell collaboration system
+  title: Show and Tell
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to Keycloak with username and password
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Login with Keycloak
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout from Keycloak
+      parameters:
+      - description: Logout request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ApiResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Logout from Keycloak
+      tags:
+      - auth
+  /auth/token:
+    post:
+      consumes:
+      - application/json
+      description: Get JWT Keycloak token
+      parameters:
+      - description: Token request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Get JWT Keycloak token
+      tags:
+      - auth
+  /schedules:
+    post:
+      consumes:
+      - application/json
+      description: add schedule
+      parameters:
+      - description: Schedule
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SchedulePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add schedule
+      tags:
+      - schedules
+  /schedules/:
+    get:
+      consumes:
+      - application/json
+      description: get schedules
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Schedule'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List schedules
+      tags:
+      - schedules
+  /schedules/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete schedule
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete schedule
+      tags:
+      - schedules
+    get:
+      consumes:
+      - application/json
+      description: get schedules
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Schedule'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List schedules
+      tags:
+      - schedules
+    put:
+      consumes:
+      - application/json
+      description: edit schedule
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Schedule
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SchedulePutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Schedule'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Edit schedule
+      tags:
+      - schedules
+  /speakers:
+    post:
+      consumes:
+      - application/json
+      description: add speaker
+      parameters:
+      - description: Speaker
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SpeakerPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add speaker
+      tags:
+      - speakers
+  /speakers/:
+    get:
+      consumes:
+      - application/json
+      description: get speakers
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Speaker'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List speakers
+      tags:
+      - speakers
+  /speakers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete speaker
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete speaker
+      tags:
+      - speakers
+    get:
+      consumes:
+      - application/json
+      description: get speakers
+      parameters:
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      - description: list record date from
+        format: date
+        in: query
+        name: f
+        type: integer
+      - description: list record date to
+        format: date
+        in: query
+        name: t
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.Speaker'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List speakers
+      tags:
+      - speakers
+    put:
+      consumes:
+      - application/json
+      description: edit speaker
+      parameters:
+      - description: request id
+        format: integer
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Speaker
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.SpeakerPutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Speaker'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Edit speaker
+      tags:
+      - speakers
+  /users/:
+    get:
+      consumes:
+      - application/json
+      description: get users
+      parameters:
+      - description: Authorization header
+        format: string
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List users
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get users
+      parameters:
+      - description: Authorization header
+        format: string
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: find by id
+        format: integer
+        in: path
+        name: id
+        type: integer
+      - description: list record position begin
+        format: integer
+        in: query
+        name: b
+        type: integer
+      - description: list record position end
+        format: integer
+        in: query
+        name: e
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List users
+      tags:
+      - users
+  /version:
+    get:
+      consumes:
+      - application/json
+      description: get versions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Version'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: List versions
+      tags:
+      - versions
+swagger: "2.0"
