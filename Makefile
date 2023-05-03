@@ -10,6 +10,9 @@ install_deps:
 swag:
 	@~/go/bin/swag init --parseDependency --parseInternal
 
+static:
+	@cd $(STATIC_DIR) && npm install && npm run build
+
 build: static
 	@go build -o bin/showandtell main.go
 
@@ -20,9 +23,6 @@ run: build
 	@/usr/src/app/docker/setup-npm-env.sh
 	@/usr/src/app/bin/showandtell -migrate
 	@/usr/src/app/bin/showandtell -serve
-
-static:
-	@cd $(STATIC_DIR) && npm run build
 
 compile: static
 	@echo "Compiling for every OS and Platform"
