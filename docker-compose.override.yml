@@ -3,5 +3,6 @@ version: "3.8"
 services:
   showandtell.go:
     restart: "unless-stopped"
+    command: sh -c "make serve"
   showandtell.nginx:
     restart: "unless-stopped"

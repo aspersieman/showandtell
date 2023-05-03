@@ -103,6 +103,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/token": {
+            "post": {
+                "description": "Get JWT Keycloak token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get JWT Keycloak token",
+                "parameters": [
+                    {
+                        "description": "Token request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.TokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/schedules": {
             "post": {
                 "description": "add schedule",
@@ -1248,6 +1290,14 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.TokenRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
                     "type": "string"
                 }
             }

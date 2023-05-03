@@ -89,3 +89,7 @@ type LoginResponse struct {
 	ExpiresIn    int                `json:"expiresIn"`
 	Decoded      DecodedAccessToken `json:"decoded"`
 }
+
+type TokenRequest struct {
+	RefreshToken string `json:"refresh_token"`
+}

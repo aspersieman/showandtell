@@ -79,6 +79,53 @@ func (c *Controller) ApiAuthLogin(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(types.ApiResponse{Data: ls})
 }
 
+// ApiAuthToken Get JWT Keycloak token
+//
+//	@Summary      Get JWT Keycloak token
+//	@Description  Get JWT Keycloak token
+//	@Tags         auth
+//	@Accept       json
+//	@Produce      json
+//	@Param        request 			body      types.TokenRequest  true  "Token request"
+//	@Success      200						{object}  types.LoginResponse
+//	@Failure      400						{object}  error
+//	@Failure      403						{object}  error
+//	@Router       /auth/token 			[post]
+func (c *Controller) ApiAuthToken(ctx *fiber.Ctx) error {
+	tr := types.TokenRequest{}
+	if err := ctx.BodyParser(&tr); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(types.ApiResponse{Data: "Bad request"})
+	}
+
+	// RefreshToken(ctx context.Context, refreshToken, clientID, clientSecret, realm string) (*JWT, error) {
+	jwt, err := c.Keycloak.Gocloak.RefreshToken(
+		context.Background(),
+		tr.RefreshToken,
+		c.Keycloak.ClientId,
+		c.Keycloak.ClientSecret,
+		c.Keycloak.Realm,
+	)
+	if err != nil {
+		return ctx.Status(fiber.StatusForbidden).JSON(types.ApiResponse{Data: err.Error()})
+	}
+	keycloak := auth.NewKeycloak()
+	decodedToken, _, err := keycloak.Gocloak.DecodeAccessToken(context.Background(), jwt.AccessToken, keycloak.Realm)
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(types.ApiResponse{Data: fmt.Sprintf("Invalid or malformed token: %s", err.Error())})
+	}
+	decodedAccessToken := types.DecodedAccessToken{}
+	tokenData, _ := json.Marshal(decodedToken)
+	_ = json.Unmarshal(tokenData, &decodedAccessToken)
+	ls := &types.LoginResponse{
+		AccessToken:  jwt.AccessToken,
+		RefreshToken: jwt.RefreshToken,
+		ExpiresIn:    jwt.ExpiresIn,
+		Decoded:      decodedAccessToken,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(types.ApiResponse{Data: ls})
+}
+
 // ApiAuthLogout Logout from Keycloak
 //
 //	@Summary      Logout from Keycloak

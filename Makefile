@@ -16,6 +16,8 @@ build: static
 serve: static
 	@go run main.go --serve
 
+run:
+	@./bin/showandtell -serve
 
 static:
 	@cd $(STATIC_DIR) && npm run build

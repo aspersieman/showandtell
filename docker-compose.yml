@@ -13,7 +13,7 @@ services:
     networks:
       - default
     restart: "always"
-    command: sh -c "make serve"
+    command: sh -c "make run"
   showandtell.nginx:
     env_file: .env
     build:

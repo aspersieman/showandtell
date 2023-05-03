@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.44.0
 	github.com/gofiber/swagger v0.1.11
 	github.com/gofiber/template v1.8.1
+	github.com/gofiber/websocket/v2 v2.1.6
 	github.com/joho/godotenv v1.5.1
 	github.com/kachit/gorm-seeder v0.0.3
 	github.com/swaggo/swag v1.16.1
@@ -23,7 +24,6 @@ require (
 	github.com/go-openapi/spec v0.20.9 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
-	github.com/gofiber/websocket/v2 v2.1.6 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

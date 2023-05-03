@@ -3,14 +3,17 @@ import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 
+import { useAuthenticationStore } from '@/stores/authentication'
 import { useScheduleStore } from '@/stores/schedules'
 import NavBar from './components/NavBar.vue'
 import FooterBar from './components/FooterBar.vue'
 
 const scheduleStore = useScheduleStore()
+const authenticationStore = useAuthenticationStore()
 
 onMounted(() => {
   initFlowbite()
+  authenticationStore.init()
   scheduleStore.getSchedulesHome()
 })
 </script>

@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { ApiSchedule, ScheduleAdd, ScheduleUpdate } from '@/models/models'
-import { getApiBaseUrl, query } from '@/utils/api'
+import { getApiBaseUrl, query, headers } from '@/utils/api'
 
 export const useScheduleStore = defineStore('scheduleStore', () => {
   const schedulesHome = ref<ApiSchedule[]>([])
@@ -40,12 +40,10 @@ export const useScheduleStore = defineStore('scheduleStore', () => {
   }
 
   async function addSchedule(schedule: ScheduleAdd) {
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/schedules', {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: authHeaders,
       body: JSON.stringify(schedule)
     })
     const result = await response.json()
@@ -53,12 +51,10 @@ export const useScheduleStore = defineStore('scheduleStore', () => {
   }
 
   async function updateSchedule(schedule: ScheduleUpdate) {
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/schedules/' + schedule.id, {
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: authHeaders,
       body: JSON.stringify(schedule)
     })
     const result = await response.json()
@@ -66,12 +62,10 @@ export const useScheduleStore = defineStore('scheduleStore', () => {
   }
 
   async function deleteSchedule(scheduleId: number) {
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/schedules/' + scheduleId, {
       method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+      headers: authHeaders
     })
     const result = await response.json()
     return result

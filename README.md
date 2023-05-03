@@ -45,3 +45,6 @@
  - Support reloading page - add fiber route for all pages (catch all)
  - Add light/dark mode selection support (save in localstorage)
  - For client side ui inject 'VITE_' before selected variables and copy to web/static/src
+ - Setup docker commands for dev and for production:
+   - dev: npm run dev; air
+ - Graceful shutdown: https://github.com/gofiber/recipes/tree/master/graceful-shutdown

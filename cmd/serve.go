@@ -14,6 +14,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
 	"github.com/gofiber/websocket/v2"
 
@@ -70,6 +71,9 @@ func Serve() {
 		Views:             engine,
 		EnablePrintRoutes: isDevelopment,
 	})
+
+	// Recover from panic middleware
+	app.Use(recover.New())
 
 	app.Use(logger.New(logger.Config{
 		TimeFormat: time.RFC3339,

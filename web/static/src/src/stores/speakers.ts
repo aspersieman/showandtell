@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { ApiSchedule, ApiSpeaker, SpeakerAdd, SpeakerUpdate } from '@/models/models'
-import { getApiBaseUrl } from '@/utils/api'
+import { getApiBaseUrl, headers } from '@/utils/api'
 
 export const useSpeakerStore = defineStore('speakerStore', () => {
   const speakers = ref<ApiSpeaker[]>([])
@@ -43,13 +43,10 @@ export const useSpeakerStore = defineStore('speakerStore', () => {
   }
 
   async function addSpeaker(speaker: SpeakerAdd) {
-    console.log('addSpeaker: ', speaker)
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/speakers', {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: authHeaders,
       body: JSON.stringify(speaker)
     })
     const result = await response.json()
@@ -57,12 +54,10 @@ export const useSpeakerStore = defineStore('speakerStore', () => {
   }
 
   async function updateSpeaker(speaker: SpeakerUpdate) {
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/speakers/' + speaker.id, {
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: authHeaders,
       body: JSON.stringify(speaker)
     })
     const result = await response.json()
@@ -70,12 +65,10 @@ export const useSpeakerStore = defineStore('speakerStore', () => {
   }
 
   async function deleteSpeaker(speakerId: number) {
+    const authHeaders = headers()
     const response = await fetch(getApiBaseUrl() + '/api/v1/speakers/' + speakerId, {
       method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+      headers: authHeaders
     })
     const result = await response.json()
     return result

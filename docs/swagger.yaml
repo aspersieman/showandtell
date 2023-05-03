@@ -256,6 +256,11 @@ definitions:
       topic:
         type: string
     type: object
+  types.TokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
   types.Version:
     properties:
       latest_version:
@@ -334,6 +339,34 @@ paths:
           description: Forbidden
           schema: {}
       summary: Logout from Keycloak
+      tags:
+      - auth
+  /auth/token:
+    post:
+      consumes:
+      - application/json
+      description: Get JWT Keycloak token
+      parameters:
+      - description: Token request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+      summary: Get JWT Keycloak token
       tags:
       - auth
   /schedules:
