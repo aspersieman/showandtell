@@ -25,15 +25,8 @@ services:
       - "${APP_PORT}:80"
     expose:
       - ${NGINX_PORT}
-    environment:
-      VIRTUAL_HOST: "${VIRTUAL_HOST}"
     networks:
-      - frontman
       - default
     volumes:
       - ./:/usr/src/app:ro
     restart: "always"
-
-networks:
-  frontman:
-    external: true

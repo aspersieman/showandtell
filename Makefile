@@ -16,8 +16,10 @@ build: static
 serve: static
 	@go run main.go --serve
 
-run:
-	@./bin/showandtell -serve
+run: build
+	@/usr/src/app/docker/setup-npm-env.sh
+	@/usr/src/app/bin/showandtell -migrate
+	@/usr/src/app/bin/showandtell -serve
 
 static:
 	@cd $(STATIC_DIR) && npm run build

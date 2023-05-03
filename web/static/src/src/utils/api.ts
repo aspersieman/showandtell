@@ -1,15 +1,15 @@
 import type { Token } from '@/models/models'
 
 export function getApiBaseUrl(mode: string = 'http') {
-  console.log('getApiBaseUrl: ', import.meta.env)
   const protocol = location.protocol
+  let url = `${protocol}//${import.meta.env.VITE_VIRTUAL_HOST}`
   if (mode === 'http') {
-    return `${protocol}//${import.meta.env.VITE_VIRTUAL_HOST}`
+    url = `${protocol}//${import.meta.env.VITE_VIRTUAL_HOST}`
   }
   if (mode === 'ws') {
-    return `ws://${import.meta.env.VITE_VIRTUAL_HOST}`
+    url = `ws://${import.meta.env.VITE_VIRTUAL_HOST}`
   }
-  return `${protocol}//${import.meta.env.VITE_VIRTUAL_HOST}`
+  return url
 }
 
 export function query(url: string, params: Object | never = {}) {
