@@ -76,7 +76,7 @@ onMounted(async () => {
               </div>
               <h3 class="justify-self-start font-semibold text-gray-900 dark:text-white">
                 <div>{{ speaker.topic }}</div>
-                <div class="text-sm font-light">{{ speaker.description }}</div>
+                <div class="text-sm font-light whitespace-pre-wrap">{{ speaker.description }}</div>
               </h3>
               <p class="justify-self-end">
                 <stop-watch :max="speaker.minutes" channel="speaker" :socket-id="speaker.id"
