@@ -136,6 +136,11 @@ interface ScheduleSearchParams {
   t?: string // start_date_time To
 }
 
+interface SocketMessage {
+  socket_id: number
+  data: any
+}
+
 export type {
   ApiSpeaker,
   SpeakerAdd,
@@ -147,5 +152,6 @@ export type {
   ApiLogin,
   ApiLogout,
   Token,
-  User
+  User,
+  SocketMessage
 }

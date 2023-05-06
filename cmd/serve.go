@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -20,6 +21,7 @@ import (
 
 	auth "bitbucket.org/envirovisionsolutions/showandtell/auth"
 	database "bitbucket.org/envirovisionsolutions/showandtell/database"
+	types "bitbucket.org/envirovisionsolutions/showandtell/types"
 	utils "bitbucket.org/envirovisionsolutions/showandtell/utils"
 	web "bitbucket.org/envirovisionsolutions/showandtell/web"
 )
@@ -36,19 +38,36 @@ func runHub() {
 		select {
 		case connection := <-register:
 			clients[connection] = client{}
-			log.Println("connection registered")
+			log.Println("Websocket connection registered")
 
 		case message := <-broadcast:
-			log.Println("message received:", message)
-
 			// Send the message to all clients
 			for connection := range clients {
-				if err := connection.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
-					log.Println("write error:", err)
+				socketId, err := strconv.Atoi(connection.Params("id"))
+				if err == nil {
+					var socketMessage types.SocketMessage
+					err = json.Unmarshal([]byte(message), &socketMessage)
+					if err != nil {
+						log.Println("ERROR: Websocket message cannot be unmarshalled:", err.Error())
+					}
+					msgId := socketMessage.SocketId
+					if msgId == socketId {
+						if err := connection.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
+							if err != nil {
+								log.Println("ERROR: Websocket message cannot written:", err.Error())
+							}
+							log.Printf("Websocket message broadcast on %d: %s\n", msgId, message)
+							unregister <- connection
+							connection.WriteMessage(websocket.CloseMessage, []byte{})
 
-					unregister <- connection
-					connection.WriteMessage(websocket.CloseMessage, []byte{})
-					connection.Close()
+							connection.Close()
+						}
+						if err != nil {
+							log.Println("ERROR: Websocket message cannot be sent:", err.Error())
+						}
+					}
+				} else {
+					log.Printf("ERROR: Websocket id cannot be decoded: %s\n", err)
 				}
 			}
 
@@ -56,7 +75,7 @@ func runHub() {
 			// Remove the client from the hub
 			delete(clients, connection)
 
-			log.Println("connection unregistered")
+			log.Println("Websocket connection unregistered")
 		}
 	}
 }
@@ -120,7 +139,6 @@ func Serve() {
 
 			if messageType == websocket.TextMessage {
 				// Broadcast the received message
-				log.Printf("broadcasting message: %s\n", message)
 				broadcast <- string(message)
 			} else {
 				log.Println("websocket message received of type", messageType)

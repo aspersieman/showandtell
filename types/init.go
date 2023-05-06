@@ -93,3 +93,8 @@ type LoginResponse struct {
 type TokenRequest struct {
 	RefreshToken string `json:"refresh_token"`
 }
+
+type SocketMessage struct {
+	SocketId int `json:"socket_id"`
+	Data     any `json:"data"`
+}

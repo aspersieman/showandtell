@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 import StartSound from '@/assets/start.mp3'
 import StopSound from '@/assets/stop.mp3'
 import { getApiBaseUrl } from '@/utils/api'
+import type { SocketMessage } from '@/models/models'
 
 const props = defineProps({
   max: { type: Number, default: 0 },
@@ -28,34 +29,25 @@ const progressColour = ref('bg-blue-600')
 const sendMessages = () => {
   if (isRunning.value && props.socketId) {
     sendMessage({
-      socketId: props.socketId,
-      time: time.value,
-      progress: progress.value
+      socket_id: props.socketId,
+      data: { time: time.value, progress: progress.value }
     })
   }
 }
 let messagesInterval = setInterval(sendMessages, 1000)
 
-interface SpeakerSocketData {
-  socketId: number
-  time: string
-  progress: number
-}
-const eventsFromServer = ref<SpeakerSocketData[]>([])
+const eventsFromServer = ref<SocketMessage[]>([])
 
 const serverUrl = getApiBaseUrl('ws') + '/ws/' + props.socketId
 const socket = new WebSocket(serverUrl)
 
-const sendMessage = (data: SpeakerSocketData) => {
+const sendMessage = (data: SocketMessage) => {
   socket.send(JSON.stringify(data))
 }
 
 const pause = () => {
   isRunning.value = !isRunning.value
   if (isRunning.value) {
-    if (time.value === '00:00:00') {
-      sound('start')
-    }
     startTime.value = performance.now()
     calculate(performance.now())
     frameId.value = requestAnimationFrame(step)
@@ -96,6 +88,25 @@ const step = (timestamp: number) => {
   frameId.value = requestAnimationFrame(step)
 }
 
+const updateProgress = () => {
+  if (progress.value <= 1 && time.value === '00:00:00') {
+    sound('start')
+  } else if (progress.value <= 60) {
+    progressColour.value = 'bg-blue-600'
+  } else if (progress.value <= 80) {
+    progressColour.value = 'bg-orange-300'
+  } else if (progress.value < 100) {
+    progressColour.value = 'bg-red-600'
+  } else if (progress.value >= 100 && props.socketId) {
+    sound('stop')
+    sendMessage({
+      socket_id: props.socketId,
+      data: { time: time.value, progress: progress.value }
+    })
+    // TODO: Pause not working
+    pause()
+  }
+}
 const calculate = (timestamp: number) => {
   const diff = timestamp - startTime.value
   times.value[3] += diff / 10
@@ -117,16 +128,6 @@ const calculate = (timestamp: number) => {
   if (progress.value >= 100 || minutes >= props.max) {
     progress.value = 100
   }
-  if (progress.value <= 60) {
-    progressColour.value = 'bg-blue-600'
-  } else if (progress.value <= 80) {
-    progressColour.value = 'bg-orange-300'
-  } else if (progress.value < 100) {
-    progressColour.value = 'bg-red-600'
-  } else if (progress.value >= 100) {
-    sound('stop')
-    pause()
-  }
 }
 
 interface SoundDictionary {
@@ -144,6 +145,7 @@ const sounds: SoundDictionary[] = [
   }
 ]
 const sound = (soundType: string) => {
+  console.log('SOUND: ', soundType)
   const s = sounds.find((s) => s.name === soundType)
   if (s) {
     const audio = new Audio(s.file)
@@ -158,10 +160,9 @@ const stopwatchSocket = (socketId: number) => {
 
   socket.addEventListener('message', function (event) {
     if (socketId) {
-      let eventData: SpeakerSocketData = {
-        socketId: socketId,
-        time: '',
-        progress: 0
+      let eventData: SocketMessage = {
+        socket_id: socketId,
+        data: { time: '', progress: 0 }
       }
       try {
         eventData = JSON.parse(event.data)
@@ -169,13 +170,12 @@ const stopwatchSocket = (socketId: number) => {
         console.log(e)
       }
       console.log('Message from server ', event.data, isRunning.value)
-      if (eventData.socketId == socketId && !isRunning.value) {
-        time.value = eventData.time
-        progress.value = eventData.progress
+      if (eventData.socket_id == socketId && !isRunning.value) {
+        time.value = eventData?.data?.time
+        progress.value = eventData?.data?.progress
         eventsFromServer.value.push({
-          socketId: eventData?.socketId,
-          time: new Date().toString(),
-          progress: eventData.progress
+          socket_id: eventData?.socket_id,
+          data: { time: new Date().toString(), progress: eventData?.data?.progress }
         })
       }
     }
@@ -193,49 +193,42 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(messagesInterval)
 })
+
+watch(
+  () => progress.value,
+  (newValue, oldValue) => {
+    if (oldValue === 0 && newValue > 0) {
+      sound('start')
+    }
+    updateProgress()
+  }
+)
 </script>
 
 <template>
   <div v-if="max > 0" class="w-full bg-gray-200 rounded-full h-1.5 mb-4 dark:bg-gray-700">
-    <div
-      :class="`${progressColour} h-1.5 rounded-full dark:bg-blue-500`"
-      :style="`width: ${progress}%;`"
-    ></div>
+    <div :class="`${progressColour} h-1.5 rounded-full dark:bg-blue-500`" :style="`width: ${progress}%;`"></div>
   </div>
   <div class="flex justify-between">
     <div class="font-mono time mr-1">{{ time }}</div>
-    <button
-      v-if="!isRunning && props.showControls"
-      @click="pause()"
-      type="button"
-      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-    >
+    <button v-if="!isRunning && props.showControls" @click="pause()" type="button"
+      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
       <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 96 960 960" width="16">
         <path d="M320 853V293l440 280-440 280Zm60-280Zm0 171 269-171-269-171v342Z" />
       </svg>
     </button>
-    <button
-      v-if="isRunning && props.showControls"
-      @click="pause()"
-      type="button"
-      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-    >
+    <button v-if="isRunning && props.showControls" @click="pause()" type="button"
+      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
       <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 96 960 960" width="16">
         <path
-          d="M525 856V296h235v560H525Zm-325 0V296h235v560H200Zm385-60h115V356H585v440Zm-325 0h115V356H260v440Zm0-440v440-440Zm325 0v440-440Z"
-        />
+          d="M525 856V296h235v560H525Zm-325 0V296h235v560H200Zm385-60h115V356H585v440Zm-325 0h115V356H260v440Zm0-440v440-440Zm325 0v440-440Z" />
       </svg>
     </button>
-    <button
-      v-if="props.showControls"
-      @click="reset()"
-      type="button"
-      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-    >
+    <button v-if="props.showControls" @click="reset()" type="button"
+      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-1 py-1 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
       <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 96 960 960" width="16">
         <path
-          d="M477 936q-149 0-253-105.5T120 575h60q0 125 86 213t211 88q127 0 215-89t88-216q0-124-89-209.5T477 276q-68 0-127.5 31T246 389h105v60H142V241h60v106q52-61 123.5-96T477 216q75 0 141 28t115.5 76.5Q783 369 811.5 434T840 574q0 75-28.5 141t-78 115Q684 879 618 907.5T477 936Zm128-197L451 587V373h60v189l137 134-43 43Z"
-        />
+          d="M477 936q-149 0-253-105.5T120 575h60q0 125 86 213t211 88q127 0 215-89t88-216q0-124-89-209.5T477 276q-68 0-127.5 31T246 389h105v60H142V241h60v106q52-61 123.5-96T477 216q75 0 141 28t115.5 76.5Q783 369 811.5 434T840 574q0 75-28.5 141t-78 115Q684 879 618 907.5T477 936Zm128-197L451 587V373h60v189l137 134-43 43Z" />
       </svg>
     </button>
   </div>

@@ -38,13 +38,14 @@
 
 # TODO
  - Implement caching at route level
- - For a given schedule entry it should allow for:
-   - Internal/Private (to EVS) or External
-   - Location (i.e. chat room, physical room)
- - Add route UI transitions
- - Support reloading page - add fiber route for all pages (catch all)
+ - DONE For a given schedule entry it should allow for:
+   - DONE Internal/Private (to EVS) or External
+   - DONE Location (i.e. chat room, physical room)
+ - DONE Add route UI transitions
+ - DONE Support reloading page - add fiber route for all pages (catch all)
  - Add light/dark mode selection support (save in localstorage)
- - For client side ui inject 'VITE_' before selected variables and copy to web/static/src
+ - DONE For client side ui inject 'VITE_' before selected variables and copy to web/static/src
  - Setup docker commands for dev and for production:
    - dev: npm run dev; air
- - Graceful shutdown: https://github.com/gofiber/recipes/tree/master/graceful-shutdown
+ - DONE Graceful shutdown: https://github.com/gofiber/recipes/tree/master/graceful-shutdown
+ - Centralise all client side websocket connections to single area
