@@ -26,7 +26,11 @@ services:
     expose:
       - ${NGINX_PORT}
     networks:
+      - reverse-proxy
       - default
     volumes:
       - ./:/usr/src/app:ro
     restart: "always"
+networks:
+  reverse-proxy:
+    external: true
