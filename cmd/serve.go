@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -21,7 +20,6 @@ import (
 
 	auth "bitbucket.org/envirovisionsolutions/showandtell/auth"
 	database "bitbucket.org/envirovisionsolutions/showandtell/database"
-	types "bitbucket.org/envirovisionsolutions/showandtell/types"
 	utils "bitbucket.org/envirovisionsolutions/showandtell/utils"
 	web "bitbucket.org/envirovisionsolutions/showandtell/web"
 )
@@ -41,33 +39,16 @@ func runHub() {
 			log.Println("Websocket connection registered")
 
 		case message := <-broadcast:
+			log.Println("Websocket message received:", message)
+
 			// Send the message to all clients
 			for connection := range clients {
-				socketId, err := strconv.Atoi(connection.Params("id"))
-				if err == nil {
-					var socketMessage types.SocketMessage
-					err = json.Unmarshal([]byte(message), &socketMessage)
-					if err != nil {
-						log.Println("ERROR: Websocket message cannot be unmarshalled:", err.Error())
-					}
-					msgId := socketMessage.SocketId
-					if msgId == socketId {
-						if err := connection.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
-							if err != nil {
-								log.Println("ERROR: Websocket message cannot written:", err.Error())
-							}
-							log.Printf("Websocket message broadcast on %d: %s\n", msgId, message)
-							unregister <- connection
-							connection.WriteMessage(websocket.CloseMessage, []byte{})
+				if err := connection.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
+					log.Println("Websocket write error:", err)
 
-							connection.Close()
-						}
-						if err != nil {
-							log.Println("ERROR: Websocket message cannot be sent:", err.Error())
-						}
-					}
-				} else {
-					log.Printf("ERROR: Websocket id cannot be decoded: %s\n", err)
+					unregister <- connection
+					connection.WriteMessage(websocket.CloseMessage, []byte{})
+					connection.Close()
 				}
 			}
 
@@ -117,7 +98,7 @@ func Serve() {
 
 	go runHub()
 
-	app.Get("/ws/:id", websocket.New(func(c *websocket.Conn) {
+	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
 		// When the function returns, unregister the client and close the connection
 		defer func() {
 			unregister <- c
@@ -139,6 +120,7 @@ func Serve() {
 
 			if messageType == websocket.TextMessage {
 				// Broadcast the received message
+				log.Printf("broadcasting message: %s\n", message)
 				broadcast <- string(message)
 			} else {
 				log.Println("websocket message received of type", messageType)

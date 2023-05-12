@@ -7,6 +7,7 @@
     "src/**/*.vue",
     "src/**/*.ts",
     "src/utils/*.ts",
+    "src/types/*.ts",
     "src/views/*.vue"
   ],
   "exclude": ["src/**/__tests__/*"],

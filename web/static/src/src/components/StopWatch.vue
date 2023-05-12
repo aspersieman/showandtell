@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
+import { onMounted, ref, onBeforeUnmount, watch, getCurrentInstance } from 'vue'
+import type { ComponentInternalInstance } from 'vue'
+
 import StartSound from '@/assets/start.mp3'
 import StopSound from '@/assets/stop.mp3'
-import { getApiBaseUrl } from '@/utils/api'
 import type { SocketMessage } from '@/models/models'
+
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
 const props = defineProps({
   max: { type: Number, default: 0 },
   channel: String,
-  socketId: Number,
+  socketId: { type: Number, default: 0 },
   showControls: { type: Boolean, default: false }
 })
 
@@ -26,6 +29,7 @@ const frameId = ref<number | null>(null)
 const progress = ref(0)
 const progressColour = ref('bg-blue-600')
 
+// TODO: Sockets messages use 'socket_id', which doesn't currently map to an actual channel/socket
 const sendMessages = () => {
   if (isRunning.value && props.socketId) {
     sendMessage({
@@ -36,13 +40,14 @@ const sendMessages = () => {
 }
 let messagesInterval = setInterval(sendMessages, 1000)
 
-const eventsFromServer = ref<SocketMessage[]>([])
+// const eventsFromServer = ref<SocketMessage[]>([])
 
-const serverUrl = getApiBaseUrl('ws') + '/ws/' + props.socketId
-const socket = new WebSocket(serverUrl)
+// const serverUrl = getApiBaseUrl('ws') + '/ws/' + props.socketId
+// const socket = new WebSocket(serverUrl)
 
 const sendMessage = (data: SocketMessage) => {
-  socket.send(JSON.stringify(data))
+  console.log('sendMessage', data)
+  proxy?.$socket.send(JSON.stringify(data))
 }
 
 const pause = () => {
@@ -153,6 +158,7 @@ const sound = (soundType: string) => {
   }
 }
 
+/*
 const stopwatchSocket = (socketId: number) => {
   socket.addEventListener('open', () => {
     console.log('stopwatchSocket connected : ' + socketId)
@@ -183,12 +189,10 @@ const stopwatchSocket = (socketId: number) => {
 
   return { eventsFromServer }
 }
+*/
 
 onMounted(() => {
   reset()
-  if (props.socketId) {
-    stopwatchSocket(props.socketId)
-  }
 })
 onBeforeUnmount(() => {
   clearInterval(messagesInterval)

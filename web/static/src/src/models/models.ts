@@ -131,16 +131,6 @@ interface ScheduleUpdate {
   speakers: SpeakerAdd[] | null
 }
 
-interface ScheduleSearchParams {
-  f?: string // start_date_time From
-  t?: string // start_date_time To
-}
-
-interface SocketMessage {
-  socket_id: number
-  data: any
-}
-
 export type {
   ApiSpeaker,
   SpeakerAdd,
@@ -148,10 +138,8 @@ export type {
   ApiSchedule,
   ScheduleAdd,
   ScheduleUpdate,
-  ScheduleSearchParams,
   ApiLogin,
   ApiLogout,
   Token,
-  User,
-  SocketMessage
+  User
 }
