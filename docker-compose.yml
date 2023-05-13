@@ -30,6 +30,8 @@ services:
       - default
     volumes:
       - ./:/usr/src/app:ro
+    environment:
+      VIRTUAL_HOST: "${VIRTUAL_HOST}"
     restart: "always"
 networks:
   reverse-proxy:
