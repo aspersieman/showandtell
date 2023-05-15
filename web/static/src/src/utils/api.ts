@@ -6,7 +6,9 @@ export function getApiBaseUrl(mode: string = 'http') {
   if (mode === 'http') {
     url = `${protocol}//${import.meta.env.VITE_VIRTUAL_HOST}`
   }
-  if (mode === 'ws') {
+  if (mode === 'ws' && protocol === 'https:') {
+    url = `wss://${import.meta.env.VITE_VIRTUAL_HOST}`
+  } else if (mode === 'ws' && protocol === 'http:') {
     url = `ws://${import.meta.env.VITE_VIRTUAL_HOST}`
   }
   return url
